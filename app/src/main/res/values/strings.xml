@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">BoB</string>
     <string name="we_are_the">Nous sommes le</string>
-    <string name="amenorrhee_weeks">Semaines d\'aménorrhée (SA) :</string>
     <string name="pregnancy_weeks">Semaines de grossesse (SG)  :</string>
+    <string name="title_app">Baby on Board</string>
+    <string name="hello">Bonjour</string>
+    <string name="trimester">trimestre</string>
+    <string name="term_date">Date du terme :</string>
+    <string name="amenorrhea_weeks">Semaines d\'aménorhée (SA) :</string>
 </resources>

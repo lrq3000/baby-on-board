@@ -7,4 +7,11 @@
     <string name="trimester">trimestre</string>
     <string name="term_date">Date du terme :</string>
     <string name="amenorrhea_weeks">Semaines d\'aménorhée (SA) :</string>
+    <string name="welcome">Bienvenue !</string>
+    <string name="congrats">et félicitations pour votre Baby on Board !</string>
+    <string name="my_name">Je m\'appelle :</string>
+    <string name="ask_last_periods">Date de mes dernières règles :</string>
+    <string name="ask_last_ovulation">Date de ma dernière ovulation :</string>
+    <string name="only_if_sure">(A ne remplir que si j\'en suis sûre)</string>
+    <string name="save">Enregistrer</string>
 </resources>

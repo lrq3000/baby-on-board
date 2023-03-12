@@ -186,8 +186,6 @@ fun BobBottomAppBar(modifier: Modifier = Modifier) {
                 modifier = modifier.size(76.dp)
             )
         }
-
-
     }
 }
 

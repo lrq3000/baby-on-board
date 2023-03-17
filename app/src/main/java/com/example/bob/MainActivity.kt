@@ -24,6 +24,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.theme.light_Customcolor1
 
@@ -46,12 +49,29 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+
     Scaffold(
-        topBar = { BobTopAppBar() },
+        topBar = { BobTopAppBar(
+            OpenMenu = {navController.navigate(BobScreen.Informations.name)}
+        ) },
         bottomBar = { BobBottomAppBar() },
-    ) { paddingValues ->
-        HomeBody(modifier = Modifier.padding(paddingValues))
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = BobScreen.Home.name,
+            modifier = Modifier.padding(innerPadding)
+        ){
+            composable(route = BobScreen.Home.name){
+                HomeBody(modifier = Modifier.padding(innerPadding))
+            }
+
+            composable(route = BobScreen.Informations.name){
+                InformationSreen()
+            }
+        }
+
     }
 }
 
@@ -111,8 +131,17 @@ fun HomeBody(modifier: Modifier) {
     }
 }
 
+enum class BobScreen(){
+    Home,
+    Fruits,
+    Chart,
+    Calendar,
+    CalendarList,
+    Informations
+}
+
 @Composable
-fun BobTopAppBar(modifier: Modifier = Modifier) {
+fun BobTopAppBar(modifier: Modifier = Modifier, OpenMenu: () -> Unit = {}) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -126,7 +155,7 @@ fun BobTopAppBar(modifier: Modifier = Modifier) {
             modifier = modifier.padding(start = 16.dp),
             color = MaterialTheme.colorScheme.onSecondary
         )
-        IconButton(onClick = { /* doSomething() */ }) {
+        IconButton(onClick = { OpenMenu }) {
             Icon(
                 imageVector = Icons.Filled.MoreVert,
                 contentDescription = "Menu",

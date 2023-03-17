@@ -17,7 +17,7 @@ import com.example.bob.ui.theme.BoBTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun InformationSreen() {
+fun InformationScreen(onSaveButtonClicked: () -> Unit = {}) {
     BoBTheme() {
         Surface(
             modifier = Modifier
@@ -37,7 +37,10 @@ fun InformationSreen() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = stringResource(R.string.welcome), fontWeight = FontWeight.SemiBold)
+                        Text(
+                            text = stringResource(R.string.welcome),
+                            fontWeight = FontWeight.SemiBold
+                        )
                         Spacer(modifier = Modifier.size(16.dp))
                         Text(text = stringResource(R.string.congrats))
                     }
@@ -80,7 +83,7 @@ fun InformationSreen() {
                         singleLine = true
                     )
                     Spacer(modifier = Modifier.size(32.dp))
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = onSaveButtonClicked) {
                         Text(text = stringResource(R.string.save))
                     }
 

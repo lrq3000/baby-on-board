@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,12 +17,18 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bob.ui.theme.light_Customcolor1
+import com.example.bob.ui.viewModel.BobUiState
+import com.example.bob.ui.viewModel.BobViewModel
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    bobViewModel: BobViewModel,
+    bobUiState: BobUiState,
+    modifier: Modifier = Modifier
+) {
     val date = "10 mars 2022"
-    val name = "Ombline"
     val trimester = "1er"
     val term = "9 juin 2023"
     val amenorrheaWeeks = 23
@@ -45,7 +53,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 )
             )
             Text(
-                text = stringResource(R.string.hello) + " " + name,
+                text = stringResource(R.string.hello, bobUiState.userName),
                 modifier = Modifier.padding(10.dp),
                 fontSize = 32.sp,
                 color = Color.White

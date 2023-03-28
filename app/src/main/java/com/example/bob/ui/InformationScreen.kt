@@ -2,22 +2,34 @@ package com.example.bob
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bob.ui.theme.BoBTheme
+import com.example.bob.ui.viewModel.BobUiState
+import com.example.bob.ui.viewModel.BobViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)*/
 @Composable
-fun InformationScreen(onSaveButtonClicked: () -> Unit = {}) {
+fun InformationScreen(
+    bobViewModel: BobViewModel,
+    bobUiState: BobUiState,
+    onSaveButtonClicked: () -> Unit = {},
+) {
     BoBTheme() {
         Surface(
             modifier = Modifier
@@ -55,10 +67,17 @@ fun InformationScreen(onSaveButtonClicked: () -> Unit = {}) {
                 ) {
                     Text(text = stringResource(R.string.my_name))
                     TextField(
-                        value = "",
-                        onValueChange = {},
-                        label = { Text("Marie Curie") },
-                        singleLine = true
+                        value = bobUiState.userName,
+                        onValueChange = { bobViewModel.updateUserName(it) },
+                        label = { Text(stringResource(R.string.first_name)) },
+                        singleLine = true,
+                        isError = false,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {}
+                        )
                     )
                     Spacer(modifier = Modifier.size(32.dp))
                     Text(text = stringResource(R.string.ask_last_periods))
@@ -66,7 +85,14 @@ fun InformationScreen(onSaveButtonClicked: () -> Unit = {}) {
                         value = "",
                         onValueChange = {},
                         label = { Text("Date des régles") },
-                        singleLine = true
+                        singleLine = true,
+                        isError = false,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {}
+                        )
                     )
                     Spacer(modifier = Modifier.size(32.dp))
                     Column() {
@@ -80,7 +106,14 @@ fun InformationScreen(onSaveButtonClicked: () -> Unit = {}) {
                         value = "",
                         onValueChange = {},
                         label = { Text("Date d'ovulation") },
-                        singleLine = true
+                        singleLine = true,
+                        isError = false,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {}
+                        )
                     )
                     Spacer(modifier = Modifier.size(32.dp))
                     Button(onClick = onSaveButtonClicked) {

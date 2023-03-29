@@ -1,16 +1,16 @@
 package com.example.bob
 
+import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.viewModel.BobUiState
 import com.example.bob.ui.viewModel.BobViewModel
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 /*@Preview(showBackground = true)*/
@@ -30,7 +31,7 @@ fun InformationScreen(
     bobUiState: BobUiState,
     onSaveButtonClicked: () -> Unit = {},
 ) {
-    BoBTheme() {
+    BoBTheme {
         Surface(
             modifier = Modifier
                 .fillMaxSize()

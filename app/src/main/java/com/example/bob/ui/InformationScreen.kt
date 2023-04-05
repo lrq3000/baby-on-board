@@ -1,26 +1,34 @@
 package com.example.bob
 
-import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
+import com.example.bob.dataStore.UserInformationsRepository
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.viewModel.BobUiState
 import com.example.bob.ui.viewModel.BobViewModel
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,8 +38,27 @@ fun InformationScreen(
     bobViewModel: BobViewModel,
     bobUiState: BobUiState,
     onSaveButtonClicked: () -> Unit = {},
+    localContext: CompositionLocalContext
 ) {
     BoBTheme {
+       var dataStore: UserInformationsRepository()
+
+        var pickedDate by remember {
+            mutableStateOf(LocalDate.now())
+        }
+
+        val formattedDate by remember {
+            derivedStateOf {
+                DateTimeFormatter
+                    .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
+                    .format(pickedDate)
+            }
+        }
+
+        var userName by rememberSaveable { mutableStateOf("") }
+
+        val dateDialogState = rememberMaterialDialogState()
+
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,8 +95,8 @@ fun InformationScreen(
                 ) {
                     Text(text = stringResource(R.string.my_name))
                     TextField(
-                        value = bobUiState.userName,
-                        onValueChange = { bobViewModel.updateUserName(it) },
+                        value = userName,
+                        onValueChange = { userName = it },
                         label = { Text(stringResource(R.string.first_name)) },
                         singleLine = true,
                         isError = false,
@@ -81,8 +108,25 @@ fun InformationScreen(
                         )
                     )
                     Spacer(modifier = Modifier.size(32.dp))
-                    Text(text = stringResource(R.string.ask_last_periods))
-                    TextField(
+
+                    Text(
+                        text = stringResource(
+                            R.string.ask_last_periods,
+                        )
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { dateDialogState.show() }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Edit,
+                                contentDescription = "Edit last period date",
+                            )
+                        }
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Text(text = formattedDate)
+                    }
+
+                    /*TextField(
                         value = "",
                         onValueChange = {},
                         label = { Text("Date des régles") },
@@ -94,7 +138,8 @@ fun InformationScreen(
                         keyboardActions = KeyboardActions(
                             onDone = {}
                         )
-                    )
+                    )*/
+
                     Spacer(modifier = Modifier.size(32.dp))
                     Column() {
                         Text(text = stringResource(R.string.ask_last_ovulation))
@@ -117,11 +162,29 @@ fun InformationScreen(
                         )
                     )
                     Spacer(modifier = Modifier.size(32.dp))
-                    Button(onClick = onSaveButtonClicked) {
+                    Button(onClick = lifecycleScope.launch{ dataStore. }) {
                         Text(text = stringResource(R.string.save))
                     }
 
                 }
+            }
+        }
+        MaterialDialog(
+            dialogState = dateDialogState,
+            buttons = {
+                positiveButton(text = "Valider")
+                negativeButton(text = "Annuler") {
+                }
+            }
+        ) {
+            datepicker(
+                initialDate = LocalDate.now(),
+                title = "Pick a date",
+                allowedDateValidator = {
+                    it <= LocalDate.now()
+                }
+            ) {
+                pickedDate = it
             }
         }
     }

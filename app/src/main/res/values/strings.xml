@@ -4,7 +4,7 @@
     <string name="pregnancy_weeks">Semaines de grossesse (SG)  :</string>
     <string name="title_app">Baby on Board</string>
     <string name="hello">Bonjour %s</string>
-    <string name="trimester">trimestre</string>
+    <string name="trimester">%s trimestre</string>
     <string name="term_date">Date du terme :</string>
     <string name="amenorrhea_weeks">Semaines d\'aménorhée (SA) :</string>
     <string name="welcome">Bienvenue !</string>
@@ -15,4 +15,8 @@
     <string name="only_if_sure">(A ne remplir que si j\'en suis sûre)</string>
     <string name="save">Enregistrer</string>
     <string name="first_name">Prénom</string>
+    <string name="month">%s mois</string>
+    <string name="validate">Valider</string>
+    <string name="cancel">Annuler</string>
+    <string name="pick_a_date">Choisir une date</string>
 </resources>

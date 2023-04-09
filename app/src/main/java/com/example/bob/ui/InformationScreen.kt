@@ -1,11 +1,12 @@
 package com.example.bob
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.EditCalendar
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,13 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import com.example.bob.dataStore.UserInformationsRepository
+import com.example.bob.dataStore.UserInformations
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.viewModel.BobUiState
 import com.example.bob.ui.viewModel.BobViewModel
@@ -30,6 +30,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
+import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 /*@Preview(showBackground = true)*/
@@ -38,26 +39,53 @@ fun InformationScreen(
     bobViewModel: BobViewModel,
     bobUiState: BobUiState,
     onSaveButtonClicked: () -> Unit = {},
-    localContext: CompositionLocalContext
 ) {
     BoBTheme {
-       var dataStore: UserInformationsRepository()
-
-        var pickedDate by remember {
-            mutableStateOf(LocalDate.now())
+        var periodPickedDate by remember {
+            mutableStateOf(
+                if (bobUiState.userLastPeriodsDate !== "") {
+                    LocalDate.parse(bobUiState.userLastPeriodsDate)
+                } else {
+                    LocalDate.now()
+                },
+            )
         }
 
-        val formattedDate by remember {
+        var ovulationPickedDate by remember {
+            mutableStateOf(
+                if (bobUiState.userLastOvulationDate != "null") {
+                    LocalDate.parse(bobUiState.userLastOvulationDate)
+                } else {
+                    null
+                },
+            )
+        }
+
+        val periodFormattedDate by remember {
             derivedStateOf {
                 DateTimeFormatter
                     .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
-                    .format(pickedDate)
+                    .format(periodPickedDate)
             }
         }
 
-        var userName by rememberSaveable { mutableStateOf("") }
+        val ovulationFormattedDate by remember {
+            derivedStateOf {
+                if (ovulationPickedDate !== null){
+                    DateTimeFormatter
+                        .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
+                        .format(ovulationPickedDate)
+                }else {
+                    "Non défini"
+                }
 
-        val dateDialogState = rememberMaterialDialogState()
+            }
+        }
+
+        var userName by rememberSaveable { mutableStateOf(bobUiState.userName) }
+
+        val periodDateDialogState = rememberMaterialDialogState()
+        val ovulationDateDialogState = rememberMaterialDialogState()
 
         Surface(
             modifier = Modifier
@@ -116,14 +144,14 @@ fun InformationScreen(
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { dateDialogState.show() }) {
+                        IconButton(onClick = { periodDateDialogState.show() }) {
                             Icon(
-                                imageVector = Icons.Rounded.Edit,
+                                imageVector = Icons.Rounded.EditCalendar,
                                 contentDescription = "Edit last period date",
                             )
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = formattedDate)
+                        Text(text = periodFormattedDate)
                     }
 
                     /*TextField(
@@ -148,21 +176,37 @@ fun InformationScreen(
                             fontStyle = FontStyle.Italic
                         )
                     }
-                    TextField(
-                        value = "",
-                        onValueChange = {},
-                        label = { Text("Date d'ovulation") },
-                        singleLine = true,
-                        isError = false,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {}
-                        )
-                    )
+//                    TextField(
+//                        value = "",
+//                        onValueChange = {},
+//                        label = { Text("Date d'ovulation") },
+//                        singleLine = true,
+//                        isError = false,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            imeAction = ImeAction.Done
+//                        ),
+//                        keyboardActions = KeyboardActions(
+//                            onDone = {}
+//                        )
+//                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { ovulationDateDialogState.show() }) {
+                            Icon(
+                                imageVector = Icons.Rounded.EditCalendar,
+                                contentDescription = "Edit last ovulation date",
+                            )
+                        }
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Text(text = ovulationFormattedDate)
+                    }
+
                     Spacer(modifier = Modifier.size(32.dp))
-                    Button(onClick = lifecycleScope.launch{ dataStore. }) {
+                    val data =
+                        UserInformations(userName, periodPickedDate.toString(), ovulationPickedDate.toString())
+                    Button(onClick = {
+                        bobViewModel.updateUserInformations(data)
+                        onSaveButtonClicked()
+                    }) {
                         Text(text = stringResource(R.string.save))
                     }
 
@@ -170,21 +214,52 @@ fun InformationScreen(
             }
         }
         MaterialDialog(
-            dialogState = dateDialogState,
+            dialogState = periodDateDialogState,
             buttons = {
-                positiveButton(text = "Valider")
-                negativeButton(text = "Annuler") {
+                positiveButton(text = stringResource(R.string.validate), TextStyle(color = MaterialTheme.colorScheme.primary))
+                negativeButton(text = stringResource(R.string.cancel), TextStyle(color = MaterialTheme.colorScheme.primary)) {
                 }
             }
         ) {
             datepicker(
-                initialDate = LocalDate.now(),
-                title = "Pick a date",
+                initialDate = periodPickedDate,
+                title = stringResource(R.string.pick_a_date),
                 allowedDateValidator = {
                     it <= LocalDate.now()
-                }
+                },
+                locale = Locale.FRANCE,
+                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
+                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
+                    headerTextColor = MaterialTheme.colorScheme.primary
+                ),
             ) {
-                pickedDate = it
+                periodPickedDate = it
+            }
+        }
+
+        MaterialDialog(
+            dialogState = ovulationDateDialogState,
+            buttons = {
+                positiveButton(text = stringResource(R.string.validate), TextStyle(color = MaterialTheme.colorScheme.primary))
+                negativeButton(text = stringResource(R.string.cancel), TextStyle(color = MaterialTheme.colorScheme.primary)) {
+                }
+            }
+        ) {
+            datepicker(
+                initialDate = ovulationPickedDate ?: LocalDate.now(),
+                title = stringResource(R.string.pick_a_date),
+                allowedDateValidator = {
+                    it <= LocalDate.now()
+                },
+                locale = Locale.FRANCE,
+                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
+                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
+                    headerTextColor = MaterialTheme.colorScheme.primary
+                ),
+            ) {
+                ovulationPickedDate = it
             }
         }
     }

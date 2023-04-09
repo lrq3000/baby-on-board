@@ -1,6 +1,7 @@
 package com.example.bob.data
 
 import androidx.room.*
+import androidx.room.Insert
 import kotlinx.coroutines.flow.Flow
 
 @Dao

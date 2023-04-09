@@ -16,8 +16,12 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 class BobApplication : Application() {
     lateinit var userInformationsRepository: UserInformationsRepository
 
+
+
+
     override fun onCreate() {
         super.onCreate()
         userInformationsRepository = UserInformationsRepository(dataStore)
+
     }
 }

@@ -124,7 +124,7 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
 fun BobApp(
     modifier: Modifier = Modifier,
     bobViewModel: BobViewModel = viewModel(factory = BobViewModel.Factory),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     val bobUiState by bobViewModel.uiState.collectAsState()
     Scaffold(
@@ -146,7 +146,7 @@ fun BobApp(
                     onSaveButtonClicked = { navController.navigate(BobScreen.Home.name) })
             }
 
-            composable(route = BobScreen.Calendar.name){
+            composable(route = BobScreen.Calendar.name) {
                 CalendarScreen()
             }
         }

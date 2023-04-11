@@ -19,7 +19,6 @@ import com.example.bob.ui.theme.light_Customcolor1
 import com.example.bob.ui.viewModel.BobUiState
 import com.example.bob.ui.viewModel.BobViewModel
 import java.time.LocalDate
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
@@ -35,20 +34,50 @@ fun HomeScreen(
         .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
         .format(LocalDate.now())
 
-   val lastPeriodDate = if (bobUiState.userLastPeriodsDate !== "") {
+    val lastPeriodDate = if (bobUiState.userLastPeriodsDate !== "") {
         LocalDate.parse(bobUiState.userLastPeriodsDate)
     } else {
         LocalDate.now()
     }
+
+    val userLastOvulationDate: String? = bobUiState.userLastOvulationDate
+    val ovulationDate = if (userLastOvulationDate == null || userLastOvulationDate == "null" || userLastOvulationDate == "") {
+        lastPeriodDate.plusWeeks(2)
+    } else {
+        LocalDate.parse(userLastOvulationDate)
+    }
+
     val term = DateTimeFormatter
         .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
-        .format(lastPeriodDate.plusWeeks(41))
+        .format(ovulationDate.plusWeeks(39))
 
-    val month = ChronoUnit.MONTHS.between(lastPeriodDate, LocalDate.now())
-    val stringDisplayMonth = if (month.equals(1)){"$month" + "er"}else{"$month" + "ème"}
-    val amenorrheaWeeks = ChronoUnit.DAYS.between(lastPeriodDate, LocalDate.now()) /7
-    val pregnancyWeeks = ChronoUnit.DAYS.between(lastPeriodDate.plusDays(14), LocalDate.now()) /7
-    val trimester = if (amenorrheaWeeks <= 15){"1er"}else if(amenorrheaWeeks <= 28){"2ème"}else{"3ème"}
+    val month = ChronoUnit.MONTHS.between(ovulationDate, LocalDate.now()) + 1
+    val stringDisplayMonth = if (month.equals(1)) {
+        "$month" + "er"
+    } else {
+        "$month" + "ème"
+    }
+    val amenorrheaWeeks = ChronoUnit.DAYS.between(lastPeriodDate, LocalDate.now()) / 7
+    val amenorrheaDaysLefts = ChronoUnit.DAYS.between(lastPeriodDate, LocalDate.now()) % 7
+    val amenorrheaDaysLeftsString = if (amenorrheaDaysLefts != 0.toLong()) {
+        " et $amenorrheaDaysLefts jours"
+    } else {
+        ""
+    }
+    val pregnancyWeeks = ChronoUnit.DAYS.between(ovulationDate, LocalDate.now()) / 7
+    val pregnancyDaysLeft = ChronoUnit.DAYS.between(ovulationDate, LocalDate.now()) % 7
+    val pregnancyDaysLeftString = if (pregnancyDaysLeft != 0.toLong()) {
+        " et $pregnancyDaysLeft jours"
+    } else {
+        ""
+    }
+    val trimester = if (pregnancyWeeks <= 13) {
+        "1er"
+    } else if (pregnancyWeeks <= 26) {
+        "2ème"
+    } else {
+        "3ème"
+    }
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -76,12 +105,17 @@ fun HomeScreen(
         }
         Column {
             Text(
-                text = stringResource(id = R.string.amenorrhea_weeks) + " " + amenorrheaWeeks,
+                text = stringResource(
+                    id = R.string.amenorrhea_weeks,
+                    amenorrheaWeeks
+                ) + amenorrheaDaysLeftsString,
                 color = light_Customcolor1,
             )
             Text(
-                text = stringResource(R.string.pregnancy_weeks) + " " + pregnancyWeeks,
-
+                text = stringResource(
+                    R.string.pregnancy_weeks,
+                    pregnancyWeeks
+                ) + pregnancyDaysLeftString,
                 fontStyle = FontStyle.Italic
             )
         }

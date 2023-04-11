@@ -11,11 +11,9 @@ import com.example.bob.dataStore.UserInformations
 import com.example.bob.dataStore.UserInformationsRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class BobViewModel(
     private val userInformationsRepository: UserInformationsRepository,
-//    private val userPreferenceFlow: Flow<UserInformations> = userInformationsRepository.userPreferencesFlow
 ) : ViewModel() {
 
     val uiState: StateFlow<BobUiState> =

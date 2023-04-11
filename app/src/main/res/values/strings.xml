@@ -8,7 +8,7 @@
     <string name="term_date">Date du terme :</string>
     <string name="amenorrhea_weeks">%s semaines d\'aménorhée (SA)</string>
     <string name="welcome">Bienvenue !</string>
-    <string name="congrats">et félicitations pour votre Baby on Board !</string>
+    <string name="congrats">&amp; félicitations pour votre Baby on Board !</string>
     <string name="my_name">Je m\'appelle :</string>
     <string name="ask_last_periods">Date de mes dernières règles :</string>
     <string name="ask_last_ovulation">Date de ma dernière ovulation :</string>

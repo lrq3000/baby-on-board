@@ -111,6 +111,7 @@ fun HomeScreen(
                 ) + amenorrheaDaysLeftsString,
                 color = light_Customcolor1,
             )
+            Spacer(modifier = modifier.size(8.dp))
             Text(
                 text = stringResource(
                     R.string.pregnancy_weeks,
@@ -128,7 +129,10 @@ fun HomeScreen(
                 Text(text = stringResource(R.string.month, stringDisplayMonth))
                 Text(text = stringResource(R.string.trimester, trimester))
             }
-            Text(text = stringResource(R.string.term_date) + " " + term, textAlign = TextAlign.End)
+            Column(horizontalAlignment = Alignment.End) {
+                Text(text = stringResource(R.string.term_date), textAlign = TextAlign.End)
+                Text(text = term, textAlign = TextAlign.End)
+            }
         }
     }
 }

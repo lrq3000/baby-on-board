@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.bob.dataStore.UserInformations
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.viewModel.BobUiState
@@ -88,7 +89,11 @@ fun InformationScreen(
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceAround
+            ) {
+                Spacer(modifier = Modifier.size(8.dp))
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,30 +107,32 @@ fun InformationScreen(
                     ) {
                         Text(
                             text = stringResource(R.string.welcome),
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 24.sp
+
                         )
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = stringResource(R.string.congrats))
+                        Text(text = stringResource(R.string.congrats), fontStyle = FontStyle.Italic)
                     }
                 }
-                Spacer(modifier = Modifier.size(64.dp))
+                Spacer(modifier = Modifier.size(32.dp))
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(text = stringResource(R.string.my_name))
+                    Spacer(modifier = Modifier.size(8.dp))
                     TextField(value = userName,
                         onValueChange = { userName = it },
-                        label = { Text(stringResource(R.string.first_name)) },
                         singleLine = true,
                         isError = false,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = KeyboardActions(onDone = {}))
+                        keyboardActions = KeyboardActions(onDone = {})
+                    )
                     Spacer(modifier = Modifier.size(32.dp))
 
                     Text(
@@ -176,12 +183,18 @@ fun InformationScreen(
                     val data = UserInformations(
                         userName, periodPickedDate.toString(), ovulationPickedDate.toString()
                     )
-                    Button(onClick = {
-                        bobViewModel.updateUserInformations(data)
-                        onSaveButtonClicked()
-                    }) {
-                        Text(text = stringResource(R.string.save))
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(onClick = {
+                            bobViewModel.updateUserInformations(data)
+                            onSaveButtonClicked()
+                        }) {
+                            Text(text = stringResource(R.string.save))
+                        }
                     }
+
 
                 }
             }

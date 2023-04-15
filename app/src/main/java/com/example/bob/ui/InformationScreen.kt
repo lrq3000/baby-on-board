@@ -209,7 +209,7 @@ fun InformationScreen(
                 text = stringResource(R.string.cancel),
                 TextStyle(color = MaterialTheme.colorScheme.primary)
             ) {}
-        }) {
+        }, shape = RoundedCornerShape(16.dp)) {
             datepicker(
                 initialDate = periodPickedDate,
                 title = stringResource(R.string.pick_a_date),
@@ -236,7 +236,7 @@ fun InformationScreen(
                 text = stringResource(R.string.cancel),
                 TextStyle(color = MaterialTheme.colorScheme.primary)
             ) {}
-        }) {
+        }, shape = RoundedCornerShape(16.dp)) {
             datepicker(
                 initialDate = ovulationPickedDate ?: LocalDate.now(),
                 title = stringResource(R.string.pick_a_date),

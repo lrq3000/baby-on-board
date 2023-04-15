@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -99,6 +100,7 @@ fun HomeScreen(
                 text = stringResource(R.string.hello, bobUiState.userName),
                 modifier = Modifier.padding(10.dp),
                 fontSize = 32.sp,
+                fontWeight = FontWeight.Medium,
                 color = Color.White
             )
         }

@@ -19,4 +19,6 @@
     <string name="validate">Valider</string>
     <string name="cancel">Annuler</string>
     <string name="pick_a_date">Choisir une date</string>
+    <string name="size">Taille</string>
+    <string name="weight">Poids</string>
 </resources>

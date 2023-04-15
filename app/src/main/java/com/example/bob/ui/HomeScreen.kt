@@ -26,7 +26,6 @@ import java.util.*
 
 @Composable
 fun HomeScreen(
-    bobViewModel: BobViewModel,
     bobUiState: BobUiState,
     modifier: Modifier = Modifier
 ) {

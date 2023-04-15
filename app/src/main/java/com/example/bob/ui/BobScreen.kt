@@ -28,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bob.HomeScreen
 import com.example.bob.InformationScreen
 import com.example.bob.R
-import com.example.bob.ui.elements.CalendarScreen
+import com.example.bob.ui.elements.MesureScreen
 import com.example.bob.ui.viewModel.BobViewModel
 
 enum class BobScreen() {
@@ -136,7 +136,7 @@ fun BobApp(
             modifier = modifier.padding(paddingValues)
         ) {
             composable(route = BobScreen.Home.name) {
-                HomeScreen(bobViewModel, bobUiState)
+                HomeScreen(bobUiState)
             }
 
             composable(route = BobScreen.Informations.name) {
@@ -147,7 +147,7 @@ fun BobApp(
             }
 
             composable(route = BobScreen.Calendar.name) {
-                CalendarScreen()
+                MesureScreen(bobUiState)
             }
         }
     }

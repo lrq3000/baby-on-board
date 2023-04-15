@@ -131,7 +131,8 @@ fun InformationScreen(
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = KeyboardActions(onDone = {})
+                        keyboardActions = KeyboardActions(onDone = {}),
+                        modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.size(32.dp))
 

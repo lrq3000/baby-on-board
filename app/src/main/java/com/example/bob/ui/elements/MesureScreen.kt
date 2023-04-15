@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.bob.R
 import com.example.bob.ui.viewModel.BobUiState
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -41,7 +40,7 @@ fun MesureScreen(bobUiState: BobUiState) {
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
 
-    val weeksInfos = when (pagerState.currentPage) {
+    val weeksInfos = when (pagerState.currentPage + 2) {
         2 -> listOf(R.drawable._2, "Un retard.. ?", "0,2mm", "/")
         3 -> listOf(R.drawable._3, "Une graine de pavot", "1mm", "/")
         4 -> listOf(R.drawable._4, "Une graine de sésame", "4mm", "/")
@@ -69,23 +68,21 @@ fun MesureScreen(bobUiState: BobUiState) {
         26 -> listOf(R.drawable._26, "Une salade", "32cm", "900gr")
         27 -> listOf(R.drawable._27, "Un chou fleur", "33cm", "1kg")
         28 -> listOf(R.drawable._28, "Une aubergine", "34cm", "1,2kg")
-        29 -> listOf("", "Une botte de céleri", "36cm", "1,3kg")
+        29 -> listOf(R.drawable._29, "Une botte de céleri", "36cm", "1,3kg")
         30 -> listOf(R.drawable._30, "Un chou vert", "38cm", "1,5kg")
         31 -> listOf(R.drawable._31, "Une noix de coco", "40cm", "1,7kg")
         32 -> listOf(R.drawable._32, "Un butternut", "41cm", "2kg")
         33 -> listOf(R.drawable._33, "Une botte de poireaux", "42cm", "2,1kg")
         34 -> listOf(R.drawable._34, "Un ananas", "43cm", "2,3kg")
-        35 -> listOf("", "Une blette", "45cm", "2,4kg")
+        35 -> listOf(R.drawable._35, "Une blette", "45cm", "2,4kg")
         36 -> listOf(R.drawable._36, "Un chou chinois", "46cm", "2,6kg")
-        37 -> listOf("", "Une courge cireuse", "48cm", "2,8kg")
+        37 -> listOf(R.drawable._37, "Une courge cireuse", "48cm", "2,8kg")
         38 -> listOf(R.drawable._38, "Une pastèque", "50cm", "3,2kg")
         39 -> listOf(R.drawable._39, "Une citrouille", "50-52cm", "3,3-3,5kg")
         else -> listOf(R.drawable._40, "Une citrouille", "50 - 52cm", "3,3 - 3,5kg")
     }
 
     val images = listOf(
-        R.drawable._2,
-        R.drawable._2,
         R.drawable._2,
         R.drawable._3,
         R.drawable._4,
@@ -113,18 +110,15 @@ fun MesureScreen(bobUiState: BobUiState) {
         R.drawable._26,
         R.drawable._27,
         R.drawable._28,
-        R.drawable._28,
-//        R.drawable._29,
+        R.drawable._29,
         R.drawable._30,
         R.drawable._31,
         R.drawable._32,
         R.drawable._33,
         R.drawable._34,
-        R.drawable._34,
-//        R.drawable._35,
+        R.drawable._35,
         R.drawable._36,
-        R.drawable._36,
-//        R.drawable._37,
+        R.drawable._37,
         R.drawable._38,
         R.drawable._39,
         R.drawable._40,
@@ -149,7 +143,7 @@ fun MesureScreen(bobUiState: BobUiState) {
                 )
             }
             HorizontalPager(
-                pageCount = 38,
+                pageCount = 39,
                 state = pagerState,
                 contentPadding = PaddingValues(horizontal = 32.dp)
             ) { page ->
@@ -158,10 +152,10 @@ fun MesureScreen(bobUiState: BobUiState) {
                     name = weeksInfos.get(1) as String,
                     size = weeksInfos.get(2) as String,
                     weight = weeksInfos.get(3) as String,
-                    SGcount = pagerState.currentPage
+                    SGcount = pagerState.currentPage + 2
                 )
             }
-            scope.launch {
+            LaunchedEffect(key1 = pagerState) {
                 pagerState.scrollToPage(SGcount.toInt())
             }
         }

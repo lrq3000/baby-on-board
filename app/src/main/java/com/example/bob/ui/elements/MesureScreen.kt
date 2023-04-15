@@ -156,7 +156,7 @@ fun MesureScreen(bobUiState: BobUiState) {
                 )
             }
             LaunchedEffect(key1 = pagerState) {
-                pagerState.scrollToPage(SGcount.toInt())
+                pagerState.scrollToPage(SGcount.toInt() - 2)
             }
         }
     }

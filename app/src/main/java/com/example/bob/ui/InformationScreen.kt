@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bob.dataStore.UserInformations
@@ -84,7 +85,7 @@ fun InformationScreen(
         val periodDateDialogState = rememberMaterialDialogState()
         val ovulationDateDialogState = rememberMaterialDialogState()
 
-        Surface(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
@@ -98,7 +99,7 @@ fun InformationScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .fillMaxHeight(0.15f)
+                        .fillMaxHeight(0.2f)
                         .clip(RoundedCornerShape(8.dp)),
                     color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
@@ -109,11 +110,16 @@ fun InformationScreen(
                         Text(
                             text = stringResource(R.string.welcome),
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 24.sp
+                            fontSize = 24.sp,
+                            textAlign = TextAlign.Center
 
                         )
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = stringResource(R.string.congrats), fontStyle = FontStyle.Italic)
+                        Text(
+                            text = stringResource(R.string.congrats),
+                            fontStyle = FontStyle.Italic,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.size(32.dp))
@@ -152,7 +158,7 @@ fun InformationScreen(
                             )
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = periodFormattedDate)
+                        Text(text = periodFormattedDate, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
 
                     Spacer(modifier = Modifier.size(32.dp))
@@ -171,7 +177,7 @@ fun InformationScreen(
                             )
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = ovulationFormattedDate)
+                        Text(text = ovulationFormattedDate, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         if (ovulationPickedDate != null) {
                             IconButton(onClick = { ovulationPickedDate = null }) {
                                 Icon(

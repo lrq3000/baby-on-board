@@ -38,7 +38,7 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
 //    val weight: String = "testpoids"
 //    val SGcount: Int = 12
 
-    Surface(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
@@ -76,11 +76,11 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
                 )
             Surface(
                 modifier = Modifier
-                    .fillMaxWidth(.95f)
+                    .fillMaxWidth(.94f)
                     .padding(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .align(alignment = Alignment.CenterHorizontally),
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.surfaceVariant,
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceAround,
@@ -90,26 +90,26 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
                         Text(
                             text = stringResource(R.string.size),
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.primary
+//                            color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
                             text = size,
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.primary
+//                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = stringResource(R.string.weight),
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.primary
+//                            color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
                             text = weight,
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.primary
+//                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

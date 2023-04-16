@@ -1,15 +1,25 @@
 package com.example.bob.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LinearScale
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Insights
 import androidx.compose.material.icons.rounded.List
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,22 +56,22 @@ fun BobTopAppBar(navController: NavController, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.secondaryContainer),
+            .background(color = MaterialTheme.colorScheme.surfaceVariant),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = stringResource(R.string.title_app),
             fontSize = 22.sp,
+            fontWeight = FontWeight.Medium,
             modifier = modifier.padding(start = 16.dp),
-            color = MaterialTheme.colorScheme.onSecondary
+            color = Color.White
         )
         IconButton(onClick = { navController.navigate(BobScreen.Informations.name) }) {
             Icon(
-                /*imageVector = Icons.Filled.MoreVert,*/
-                imageVector = Icons.Filled.Settings,
+                imageVector = Icons.Filled.MoreVert,
                 contentDescription = "Menu",
-                tint = MaterialTheme.colorScheme.onSecondary
+                tint = Color.White
             )
         }
     }
@@ -72,7 +83,7 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
         modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
-            .background(color = MaterialTheme.colorScheme.primaryContainer),
+            .background(color = MaterialTheme.colorScheme.surfaceVariant),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -84,7 +95,7 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
                 modifier = modifier.size(76.dp)
             )
         }
-        IconButton(onClick = { navController.navigate(BobScreen.Calendar.name) }) {
+        IconButton(onClick = { navController.navigate(BobScreen.Fruits.name) }) {
             Icon(
                 imageVector = Icons.Filled.LinearScale,
                 contentDescription = "Linear Scale",
@@ -129,7 +140,8 @@ fun BobApp(
     val bobUiState by bobViewModel.uiState.collectAsState()
     Scaffold(
         topBar = { BobTopAppBar(navController = navController) },
-        bottomBar = { BobBottomAppBar(navController = navController) }) { paddingValues ->
+        bottomBar = { BobBottomAppBar(navController = navController) },
+    ) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = BobScreen.Home.name,
@@ -146,7 +158,7 @@ fun BobApp(
                     onSaveButtonClicked = { navController.navigate(BobScreen.Home.name) })
             }
 
-            composable(route = BobScreen.Calendar.name) {
+            composable(route = BobScreen.Fruits.name) {
                 MesureScreen(bobUiState)
             }
         }

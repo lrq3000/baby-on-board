@@ -3,6 +3,7 @@ package com.example.bob
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -84,33 +85,36 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = stringResource(R.string.we_are_the) + " " + todayDate,
-            modifier = Modifier.align(Alignment.End)
-        )
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.home_pic),
-                contentDescription = "test",
-                modifier = Modifier.clip(
-                    RoundedCornerShape(8.dp)
-                )
-            )
+        Column(modifier = Modifier.padding(top = 32.dp)) {
             Text(
-                text = stringResource(R.string.hello, bobUiState.userName),
-                modifier = Modifier.padding(10.dp),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White
+                text = stringResource(R.string.we_are_the) + " " + todayDate,
+                modifier = Modifier.align(Alignment.End).padding(bottom = 24.dp)
             )
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.home_pic),
+                    contentDescription = "test",
+                    modifier = Modifier.clip(
+                        RoundedCornerShape(8.dp)
+                    )
+                )
+                Text(
+                    text = stringResource(R.string.hello, bobUiState.userName),
+                    modifier = Modifier.padding(10.dp),
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
+                )
+            }
         }
+
         Column {
             Text(
                 text = stringResource(
                     id = R.string.amenorrhea_weeks,
                     amenorrheaWeeks
                 ) + amenorrheaDaysLeftsString,
-                color = light_Customcolor1,
+                color = MaterialTheme.colorScheme.secondary,
             )
             Spacer(modifier = modifier.size(8.dp))
             Text(

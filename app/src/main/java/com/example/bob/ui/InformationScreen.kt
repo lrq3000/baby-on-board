@@ -97,9 +97,10 @@ fun InformationScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(16.dp)
                         .fillMaxHeight(0.15f)
                         .clip(RoundedCornerShape(8.dp)),
-                    color = MaterialTheme.colorScheme.secondaryContainer
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -124,7 +125,8 @@ fun InformationScreen(
                 ) {
                     Text(text = stringResource(R.string.my_name))
                     Spacer(modifier = Modifier.size(8.dp))
-                    TextField(value = userName,
+                    TextField(
+                        value = userName,
                         onValueChange = { userName = it },
                         singleLine = true,
                         isError = false,
@@ -188,10 +190,12 @@ fun InformationScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(onClick = {
-                            bobViewModel.updateUserInformations(data)
-                            onSaveButtonClicked()
-                        }) {
+                        Button(
+                            onClick = {
+                                bobViewModel.updateUserInformations(data)
+                                onSaveButtonClicked()
+                            },
+                        ) {
                             Text(text = stringResource(R.string.save))
                         }
                     }

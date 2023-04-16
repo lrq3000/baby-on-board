@@ -124,7 +124,7 @@ fun MesureScreen(bobUiState: BobUiState) {
         R.drawable._40,
     )
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column {
             Row(
                 Modifier
@@ -139,7 +139,7 @@ fun MesureScreen(bobUiState: BobUiState) {
                             RoundedCornerShape(2.dp)
                         )
                         .fillMaxWidth(),
-                    trackColor = MaterialTheme.colorScheme.primaryContainer,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             }
             HorizontalPager(

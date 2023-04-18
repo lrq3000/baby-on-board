@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -58,6 +59,7 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
                 contentDescription = "test",
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight(.5f)
                     .padding(vertical = 16.dp)
                     .clip(
                         RoundedCornerShape(12.dp),

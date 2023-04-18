@@ -230,7 +230,7 @@ fun InformationScreen(
                 colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
                     headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
-                    headerTextColor = MaterialTheme.colorScheme.primary
+                    headerTextColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
             ) {
                 periodPickedDate = it

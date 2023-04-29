@@ -2,29 +2,29 @@ package com.example.bob.data
 
 import kotlinx.coroutines.flow.Flow
 
-interface InformationsRepository {
+interface NotesRepository {
     /**
      * Retrieve all the items from the the given data source.
      */
-    /*fun getAllInformationsStream(): Flow<List<Informations>>*/
+    fun getAllNotesStream(): Flow<List<Note>>
 
     /**
      * Retrieve an item from the given data source that matches with the [id].
      */
-    fun getInformationsStream(id: Int): Flow<Informations?>
+    fun getNotesStream(id: Int): Flow<Note?>
 
     /**
      * Insert item in the data source
      */
-    suspend fun insertInformations(informations: Informations)
+    suspend fun insertNotes(note: Note)
 
     /**
      * Delete item from the data source
      */
-    suspend fun deleteInformations(informations: Informations)
+    suspend fun deleteNotes(note: Note)
 
     /**
      * Update item in the data source
      */
-    suspend fun updateInformations(item: Informations)
+    suspend fun updateNotes(note: Note)
 }

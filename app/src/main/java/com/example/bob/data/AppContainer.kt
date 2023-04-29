@@ -3,11 +3,11 @@ package com.example.bob.data
 import android.content.Context
 
 interface AppContainer {
-    val informationsRepository: InformationsRepository
+    val notesRepository: NotesRepository
 }
 
 class AppDataContainer(private val context: Context): AppContainer{
-    override val informationsRepository: InformationsRepository by lazy {
-        OfflineInformationsRepository(BobDatabase.getDatabase(context).informationsDao())
+    override val notesRepository: NotesRepository by lazy {
+        OfflineNotesRepository(BobDatabase.getDatabase(context).notesDao())
     }
 }

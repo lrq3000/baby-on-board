@@ -39,7 +39,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bob.HomeScreen
 import com.example.bob.InformationScreen
 import com.example.bob.R
+import com.example.bob.ui.elements.AddNoteScreen
 import com.example.bob.ui.elements.MesureScreen
+import com.example.bob.ui.elements.NoteScreen
 import com.example.bob.ui.viewModel.BobViewModel
 
 enum class BobScreen() {
@@ -48,7 +50,8 @@ enum class BobScreen() {
     Chart,
     Calendar,
     CalendarList,
-    Informations
+    Informations,
+    AddNote
 }
 
 @Composable
@@ -119,7 +122,7 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
                 modifier = modifier.size(76.dp)
             )
         }
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { navController.navigate(BobScreen.CalendarList.name) }) {
             Icon(
                 imageVector = Icons.Rounded.List,
                 contentDescription = "List",
@@ -160,6 +163,14 @@ fun BobApp(
 
             composable(route = BobScreen.Fruits.name) {
                 MesureScreen(bobUiState)
+            }
+
+            composable(route = BobScreen.CalendarList.name) {
+                NoteScreen(onAddButtonClicked = { navController.navigate(BobScreen.AddNote.name) })
+            }
+
+            composable(route = BobScreen.AddNote.name) {
+                AddNoteScreen(onSaveButtonClicked = {navController.navigate(BobScreen.CalendarList.name)})
             }
         }
     }

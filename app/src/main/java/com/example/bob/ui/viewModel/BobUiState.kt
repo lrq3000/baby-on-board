@@ -5,3 +5,5 @@ data class BobUiState(
     val userLastPeriodsDate: String = "",
     val userLastOvulationDate: String? = null
 )
+
+

@@ -21,4 +21,5 @@
     <string name="pick_a_date">Choisir une date</string>
     <string name="size">Taille</string>
     <string name="weight">Poids</string>
+    <string name="all_my_notes">Toutes mes notes :</string>
 </resources>

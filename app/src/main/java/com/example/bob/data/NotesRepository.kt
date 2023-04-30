@@ -11,20 +11,20 @@ interface NotesRepository {
     /**
      * Retrieve an item from the given data source that matches with the [id].
      */
-    fun getNotesStream(id: Int): Flow<Note?>
+    fun getNoteStream(id: Int): Flow<Note?>
 
     /**
      * Insert item in the data source
      */
-    suspend fun insertNotes(note: Note)
+    suspend fun insertNote(note: Note)
 
     /**
      * Delete item from the data source
      */
-    suspend fun deleteNotes(note: Note)
+    suspend fun deleteNote(note: Note)
 
     /**
      * Update item in the data source
      */
-    suspend fun updateNotes(note: Note)
+    suspend fun updateNote(note: Note)
 }

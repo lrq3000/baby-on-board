@@ -28,7 +28,7 @@ fun AddNoteScreen(onSaveButtonClicked: () -> Unit = {}) {
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Text(text = "Nouvelle note :", fontSize = 24.sp, fontWeight = FontWeight.Medium)
+        Text(text = "Nouvelle note :", fontSize = 20.sp, fontWeight = FontWeight.Medium)
         Column(
             modifier = Modifier
                 .fillMaxSize(),

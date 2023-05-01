@@ -1,5 +1,6 @@
 package com.example.bob.ui.elements
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,11 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.bob.R
-import com.example.bob.ui.BobScreen
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(onAddButtonClicked: () -> Unit = {}) {
     Scaffold(floatingActionButton = {
@@ -79,7 +79,6 @@ fun NoteScreen(onAddButtonClicked: () -> Unit = {}) {
                             )
                             Text(text = "note")
                         }
-
                     }
                 }
             }

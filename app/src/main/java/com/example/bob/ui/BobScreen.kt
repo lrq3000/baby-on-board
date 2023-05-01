@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Insights
-import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -103,7 +103,7 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
             onClick = { navController.navigate(BobScreen.Fruits.name) },
             icon = {
                 Icon(
-                    imageVector = Icons.Rounded.Insights,
+                    painter = painterResource(id = R.drawable.nutrition_icon),
                     contentDescription = "Fruits"
                 )
             })
@@ -118,7 +118,7 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
             onClick = { navController.navigate(BobScreen.CalendarList.name) },
             icon = {
                 Icon(
-                    imageVector = Icons.Rounded.List,
+                    imageVector = Icons.Rounded.EditNote,
                     contentDescription = "Notes"
                 )
             })

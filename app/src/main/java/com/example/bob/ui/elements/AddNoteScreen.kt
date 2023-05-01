@@ -2,23 +2,30 @@ package com.example.bob.ui.elements
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+data class FeelingData(
+    val icon: String,
+    val label: String,
+)
 
 @Composable
 @Preview(showBackground = true)
@@ -35,37 +42,57 @@ fun AddNoteScreen(onSaveButtonClicked: () -> Unit = {}) {
             verticalArrangement = Arrangement.SpaceAround
         ) {
 
-            Column() {
-                Text(text = "Votre poids")
-                Spacer(modifier = Modifier.size(16.dp))
-                TextField(
-                    value = "",
-                    onValueChange = {},
-                    placeholder = { Text(text = "65") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth(),
-                    suffix = { Text(text = "kg") }
+//            Column() {
+//                Text(text = "Votre poids")
+//                Spacer(modifier = Modifier.size(16.dp))
+//                TextField(
+//                    value = "",
+//                    onValueChange = {},
+//                    placeholder = { Text(text = "65") },
+//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//                    modifier = Modifier.fillMaxWidth(),
+//                    suffix = { Text(text = "kg") }
+//                )
+//            }
+            Column {
+                val data: List<FeelingData> = listOf(
+                    FeelingData("\uD83E\uDD75", "Terrible"),
+                    FeelingData("\uD83D\uDE1E", "Pas bien"),
+                    FeelingData("\uD83D\uDE10", "Bof"),
+                    FeelingData("\uD83D\uDE42", "Ca va"),
+                    FeelingData("\uD83D\uDE0D", "Au top !"),
                 )
-            }
-            Column() {
                 Text(text = "Comment vous sentez-vous ?")
                 Spacer(modifier = Modifier.size(16.dp))
-                TextField(
-                    value = "",
-                    onValueChange = {},
-                    placeholder = { Text(text = "Bien") },
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val (selectedOption, onOptionSelected) = remember { mutableStateOf(data[0]) }
+                    data.forEach { selection ->
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = selection.icon, fontSize = 24.sp)
+                            Spacer(modifier = Modifier.size(8.dp))
+                            Text(text = selection.label)
+                            Spacer(modifier = Modifier.size(8.dp))
+                            RadioButton(
+                                selected = (selection == selectedOption),
+                                onClick = { onOptionSelected(selection) })
+                        }
+                    }
+//                    Text(text = selectedOption.label)
+                }
             }
-            Column() {
+            Column {
                 Text(text = "Autre chose ?")
                 Spacer(modifier = Modifier.size(16.dp))
                 TextField(
                     value = "",
                     onValueChange = {},
                     placeholder = { Text(text = "J'ai mangé des carottes") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 6
                 )
             }
             Button(

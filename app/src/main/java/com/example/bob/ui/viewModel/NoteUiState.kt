@@ -3,7 +3,7 @@ package com.example.bob.ui.viewModel
 import com.example.bob.data.Note
 import java.time.LocalDate
 
-class NoteUiState(
+data class NoteUiState(
     val id: Int = 0,
     val date: LocalDate = LocalDate.now(),
     val note: String = ""

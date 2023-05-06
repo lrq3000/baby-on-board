@@ -1,4 +1,4 @@
-package com.example.bob.ui.elements
+package com.example.bob.ui.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

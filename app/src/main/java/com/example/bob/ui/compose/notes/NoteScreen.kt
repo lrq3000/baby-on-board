@@ -1,4 +1,4 @@
-package com.example.bob.ui.elements
+package com.example.bob.ui.compose
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement

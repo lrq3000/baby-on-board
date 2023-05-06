@@ -41,9 +41,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bob.HomeScreen
 import com.example.bob.InformationScreen
 import com.example.bob.R
-import com.example.bob.ui.elements.AddNoteScreen
-import com.example.bob.ui.elements.MesureScreen
-import com.example.bob.ui.elements.NoteScreen
+import com.example.bob.ui.compose.MesureScreen
+import com.example.bob.ui.compose.NoteScreen
+import com.example.bob.ui.compose.notes.AddNoteScreen
 import com.example.bob.ui.viewModel.BobViewModel
 
 enum class BobScreen() {

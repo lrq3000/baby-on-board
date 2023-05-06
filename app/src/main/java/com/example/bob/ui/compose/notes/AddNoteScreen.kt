@@ -1,4 +1,4 @@
-package com.example.bob.ui.elements
+package com.example.bob.ui.compose.notes
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,9 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bob.ui.viewModel.AddNoteViewModel
+import com.example.bob.ui.viewModel.NoteUiState
 
 data class FeelingData(
     val icon: String,
@@ -28,8 +30,23 @@ data class FeelingData(
 )
 
 @Composable
-@Preview(showBackground = true)
-fun AddNoteScreen(onSaveButtonClicked: () -> Unit = {}) {
+fun AddNoteScreen(
+    onSaveButtonClicked: () -> Unit = {},
+    viewModel: AddNoteViewModel = viewModel(factory = AddNoteViewModel.Factory)
+) {
+    AddNoteBody(
+        onSaveButtonClicked = onSaveButtonClicked,
+        noteUiState = viewModel.noteUiState,
+        onValueChange = viewModel::updateUiState
+    )
+}
+
+@Composable
+fun AddNoteBody(
+    noteUiState: NoteUiState,
+    onValueChange: (NoteUiState) -> Unit = {},
+    onSaveButtonClicked: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,8 +105,8 @@ fun AddNoteScreen(onSaveButtonClicked: () -> Unit = {}) {
                 Text(text = "Autre chose ?")
                 Spacer(modifier = Modifier.size(16.dp))
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = noteUiState.note,
+                    onValueChange = { onValueChange(noteUiState.copy(note = it)) },
                     placeholder = { Text(text = "J'ai mangé des carottes") },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 6

@@ -41,6 +41,7 @@ class BobViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as BobApplication)
                 BobViewModel(application.userInformationsRepository)
+//                AddNoteViewModel(application.notesRepository)
             }
         }
     }

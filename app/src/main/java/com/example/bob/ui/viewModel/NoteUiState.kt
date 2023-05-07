@@ -5,19 +5,20 @@ import java.time.LocalDate
 
 data class NoteUiState(
     val id: Int = 0,
-    val date: LocalDate = LocalDate.now(),
+//    val date: LocalDate = LocalDate.now(),
+//    val date: String = "",
     val note: String = ""
 )
 
 fun NoteUiState.toNote(): Note = Note(
     id = id,
-    date = date,
+//    date = date,
     note = note
 )
 
 fun Note.toNoteUiState(): NoteUiState = NoteUiState(
     id = id,
-    date = date,
+//    date = date,
     note = note
 )
 

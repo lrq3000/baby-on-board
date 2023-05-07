@@ -8,6 +8,6 @@ import java.time.LocalDate
 data class Note(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val date: LocalDate,
+//    val date: String,
     val note: String
 )

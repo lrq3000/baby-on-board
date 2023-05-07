@@ -15,6 +15,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bob.ui.viewModel.AddNoteViewModel
 import com.example.bob.ui.viewModel.NoteUiState
+import kotlinx.coroutines.launch
 
 data class FeelingData(
     val icon: String,
@@ -31,11 +33,18 @@ data class FeelingData(
 
 @Composable
 fun AddNoteScreen(
-    onSaveButtonClicked: () -> Unit = {},
+    navigateBack: () -> Unit,
     viewModel: AddNoteViewModel = viewModel(factory = AddNoteViewModel.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     AddNoteBody(
-        onSaveButtonClicked = onSaveButtonClicked,
+        onSaveClick = {
+            coroutineScope.launch {
+                viewModel.saveNote()
+                navigateBack()
+            }
+        },
         noteUiState = viewModel.noteUiState,
         onValueChange = viewModel::updateUiState
     )
@@ -45,7 +54,7 @@ fun AddNoteScreen(
 fun AddNoteBody(
     noteUiState: NoteUiState,
     onValueChange: (NoteUiState) -> Unit = {},
-    onSaveButtonClicked: () -> Unit = {}
+    onSaveClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -113,7 +122,7 @@ fun AddNoteBody(
                 )
             }
             Button(
-                onClick = { onSaveButtonClicked() },
+                onClick = { onSaveClick() },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(text = "Ajouter")

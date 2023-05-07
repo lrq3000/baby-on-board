@@ -49,7 +49,6 @@ import com.example.bob.ui.viewModel.BobViewModel
 enum class BobScreen() {
     Home,
     Fruits,
-
     //    Chart,
     Calendar,
     CalendarList,
@@ -168,7 +167,7 @@ fun BobApp(
             }
 
             composable(route = BobScreen.AddNote.name) {
-                AddNoteScreen(onSaveButtonClicked = { navController.navigate(BobScreen.CalendarList.name) })
+                AddNoteScreen(navigateBack = { navController.popBackStack() })
             }
         }
     }

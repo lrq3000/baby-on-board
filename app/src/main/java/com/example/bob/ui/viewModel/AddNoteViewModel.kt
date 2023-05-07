@@ -28,7 +28,7 @@ class AddNoteViewModel(private val notesRepository: NotesRepository) : ViewModel
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BobApplication)
-                AddNoteViewModel(application.notesRepository)
+                AddNoteViewModel(application.appDataContainer.notesRepository)
             }
         }
     }

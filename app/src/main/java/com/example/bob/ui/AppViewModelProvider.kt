@@ -1,4 +1,3 @@
-/*
 package com.example.bob.ui
 
 import android.app.Application
@@ -13,25 +12,25 @@ import com.example.bob.ui.viewModel.BobViewModel
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         // Initializer for ItemEditViewModel
-        */
-/*        initializer {
-                    ItemEditViewModel(
-                        this.createSavedStateHandle()
-                    )
-                }*//*
+
+//        initializer {
+//            ItemEditViewModel(
+//                this.createSavedStateHandle()
+//            )
+//        }
 
         // Initializer for ItemEntryViewModel
         initializer {
-            AddNoteViewModel(bobApplication().notesRepository)
+            AddNoteViewModel(bobApplication().appDataContainer.notesRepository)
         }
 
         // Initializer for ItemDetailsViewModel
-        */
-/*        initializer {
-                    ItemDetailsViewModel(
-                        this.createSavedStateHandle()
-                    )
-                }*//*
+
+//        initializer {
+//            ItemDetailsViewModel(
+//                this.createSavedStateHandle()
+//            )
+//        }
 
 
         // Initializer for HomeViewModel
@@ -41,12 +40,10 @@ object AppViewModelProvider {
     }
 }
 
-*/
 /**
  * Extension function to queries for [Application] object and returns an instance of
  * [InventoryApplication].
- *//*
+ */
 
 fun CreationExtras.bobApplication(): BobApplication =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BobApplication)
-*/

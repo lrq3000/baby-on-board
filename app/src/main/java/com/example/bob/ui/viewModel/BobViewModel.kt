@@ -11,7 +11,6 @@ import com.example.bob.dataStore.UserInformations
 import com.example.bob.dataStore.UserInformationsRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-
 class BobViewModel(
     private val userInformationsRepository: UserInformationsRepository,
 ) : ViewModel() {

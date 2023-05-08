@@ -1,5 +1,6 @@
 package com.example.bob.ui.compose.notes
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,11 +9,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.EditCalendar
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,15 +35,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bob.ui.compose.notes.feelingModel.Feeling
 import com.example.bob.ui.compose.notes.feelingModel.FeelingList
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun AddNoteScreen(
     navigateBack: () -> Unit,
+    editingNote: Boolean = false,
     viewModel: AddNoteViewModel = viewModel(factory = AddNoteViewModel.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     AddNoteBody(
+        editingNote = editingNote,
         onSaveClick = {
             coroutineScope.launch {
                 viewModel.saveNote()
@@ -39,22 +56,62 @@ fun AddNoteScreen(
             }
         },
         noteUiState = viewModel.noteUiState,
-        onValueChange = viewModel::updateUiState
+        onValueChange = viewModel::updateUiState,
+        cancel = navigateBack
     )
 }
 
+@SuppressLint("UnrememberedMutableState")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNoteBody(
+    cancel: () -> Unit,
+    editingNote: Boolean,
     noteUiState: NoteUiState,
     onValueChange: (NoteUiState) -> Unit = {},
     onSaveClick: () -> Unit
 ) {
+    val openDialog = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Text(text = "Nouvelle note :", fontSize = 20.sp, fontWeight = FontWeight.Medium)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = if (editingNote) {
+                    "Modifier la note"
+                } else {
+                    "Nouvelle note :"
+                }, fontSize = 20.sp, fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            if (editingNote) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = "Supprimer la note"
+                    )
+                }
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
+                    .format(noteUiState.date)
+            )
+            IconButton(onClick = { openDialog.value = true }) {
+                Icon(
+                    imageVector = Icons.Rounded.EditCalendar,
+                    contentDescription = "Modifier la date"
+                )
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -104,12 +161,60 @@ fun AddNoteBody(
                     minLines = 6
                 )
             }
-            Button(
-                onClick = { onSaveClick() },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(text = "Ajouter")
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { cancel() },
+                ) {
+                    Text(text = "Annuler")
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                TextButton(
+                    onClick = { onSaveClick() },
+                    enabled = noteUiState.note.isNotEmpty()
+                ) {
+                    Text(
+                        text = if (editingNote) {
+                            "Enregistrer"
+                        } else {
+                            "Ajouter"
+                        }
+                    )
+                }
             }
+        }
+    }
+    if (openDialog.value) {
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Date().time)
+        DatePickerDialog(
+            onDismissRequest = {
+                // Dismiss the dialog when the user clicks outside the dialog or on the back
+                // button. If you want to disable that functionality, simply use an empty
+                // onDismissRequest.
+                openDialog.value = false
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        onValueChange(noteUiState.copy(date = Date(datePickerState.selectedDateMillis!!)))
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text("Annuler")
+                }
+            }
+        ) {
+            DatePicker(
+                state = datePickerState,
+                title = { Text(text = "Modifier la date", modifier = Modifier.padding(24.dp)) })
         }
     }
 }

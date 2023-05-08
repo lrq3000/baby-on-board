@@ -86,15 +86,6 @@ fun AddNoteBody(
                     "Nouvelle note :"
                 }, fontSize = 20.sp, fontWeight = FontWeight.Medium
             )
-            Spacer(modifier = Modifier.weight(1f))
-            if (editingNote) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Delete,
-                        contentDescription = "Supprimer la note"
-                    )
-                }
-            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -162,12 +153,17 @@ fun AddNoteBody(
                 )
             }
             Row(modifier = Modifier.fillMaxWidth()) {
+                if (editingNote){
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(text = "Supprimer")
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
                 TextButton(
                     onClick = { cancel() },
                 ) {
                     Text(text = "Annuler")
                 }
-                Spacer(modifier = Modifier.weight(1f))
                 TextButton(
                     onClick = { onSaveClick() },
                     enabled = noteUiState.note.isNotEmpty()

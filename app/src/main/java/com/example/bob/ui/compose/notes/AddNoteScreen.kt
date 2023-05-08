@@ -99,7 +99,7 @@ fun AddNoteBody(
                 TextField(
                     value = noteUiState.note,
                     onValueChange = { onValueChange(noteUiState.copy(note = it)) },
-                    placeholder = { Text(text = "J'ai mangé des carottes") },
+                    placeholder = { Text(text = "...") },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 6
                 )

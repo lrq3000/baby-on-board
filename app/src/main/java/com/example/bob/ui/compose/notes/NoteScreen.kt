@@ -80,7 +80,7 @@ fun NoteBody(noteList: List<Note>, onModifyClick: (Int) -> Unit) {
                         id = 0,
                         feeling = 4,
                         date = Date(),
-                        note = "Ceci est une note de test, puisque vous n'en avez pas encore créé"
+                        note = "Ceci est un exemple de note."
                     )
                 )
             } else {

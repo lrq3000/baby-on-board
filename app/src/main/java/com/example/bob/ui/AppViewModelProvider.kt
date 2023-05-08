@@ -6,7 +6,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.bob.BobApplication
-import com.example.bob.ui.viewModel.AddNoteViewModel
+import com.example.bob.ui.compose.notes.AddNoteViewModel
+import com.example.bob.ui.compose.notes.NoteViewModel
 import com.example.bob.ui.viewModel.BobViewModel
 
 object AppViewModelProvider {
@@ -22,6 +23,10 @@ object AppViewModelProvider {
         // Initializer for ItemEntryViewModel
         initializer {
             AddNoteViewModel(bobApplication().appDataContainer.notesRepository)
+        }
+
+        initializer {
+            NoteViewModel(bobApplication().appDataContainer.notesRepository)
         }
 
         // Initializer for ItemDetailsViewModel

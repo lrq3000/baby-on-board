@@ -42,13 +42,14 @@ import com.example.bob.HomeScreen
 import com.example.bob.InformationScreen
 import com.example.bob.R
 import com.example.bob.ui.compose.MesureScreen
-import com.example.bob.ui.compose.NoteScreen
+import com.example.bob.ui.compose.notes.NoteScreen
 import com.example.bob.ui.compose.notes.AddNoteScreen
 import com.example.bob.ui.viewModel.BobViewModel
 
 enum class BobScreen() {
     Home,
     Fruits,
+
     //    Chart,
     Calendar,
     CalendarList,
@@ -163,7 +164,9 @@ fun BobApp(
             }
 
             composable(route = BobScreen.CalendarList.name) {
-                NoteScreen(onAddButtonClicked = { navController.navigate(BobScreen.AddNote.name) })
+                NoteScreen(
+                    onAddButtonClicked = { navController.navigate(BobScreen.AddNote.name) },
+                    navigateToNoteUpdate = {})
             }
 
             composable(route = BobScreen.AddNote.name) {

@@ -1,4 +1,4 @@
-package com.example.bob.ui.viewModel
+package com.example.bob.ui.compose.notes
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

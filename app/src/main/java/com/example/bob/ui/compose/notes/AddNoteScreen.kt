@@ -13,8 +13,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,14 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bob.ui.viewModel.AddNoteViewModel
-import com.example.bob.ui.viewModel.NoteUiState
+import com.example.bob.ui.compose.notes.feelingModel.Feeling
+import com.example.bob.ui.compose.notes.feelingModel.FeelingList
 import kotlinx.coroutines.launch
-
-data class FeelingData(
-    val icon: String,
-    val label: String,
-)
 
 @Composable
 fun AddNoteScreen(
@@ -67,27 +60,8 @@ fun AddNoteBody(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-
-//            Column() {
-//                Text(text = "Votre poids")
-//                Spacer(modifier = Modifier.size(16.dp))
-//                TextField(
-//                    value = "",
-//                    onValueChange = {},
-//                    placeholder = { Text(text = "65") },
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                    modifier = Modifier.fillMaxWidth(),
-//                    suffix = { Text(text = "kg") }
-//                )
-//            }
             Column {
-                val data: List<FeelingData> = listOf(
-                    FeelingData("\uD83E\uDD75", "Terrible"),
-                    FeelingData("\uD83D\uDE1E", "Pas bien"),
-                    FeelingData("\uD83D\uDE10", "Bof"),
-                    FeelingData("\uD83D\uDE42", "Ca va"),
-                    FeelingData("\uD83D\uDE0D", "Au top !"),
-                )
+                val data: List<Feeling> = FeelingList.feelingList
                 Text(text = "Comment vous sentez-vous ?")
                 Spacer(modifier = Modifier.size(16.dp))
                 Row(
@@ -95,7 +69,6 @@ fun AddNoteBody(
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val (selectedOption, onOptionSelected) = remember { mutableStateOf(data[0]) }
                     data.forEach { selection ->
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(text = selection.icon, fontSize = 24.sp)
@@ -103,12 +76,22 @@ fun AddNoteBody(
                             Text(text = selection.label)
                             Spacer(modifier = Modifier.size(8.dp))
                             RadioButton(
-                                selected = (selection == selectedOption),
-                                onClick = { onOptionSelected(selection) })
+                                selected = (selection == data[noteUiState.feeling]),
+                                onClick = {
+                                    onValueChange(
+                                        noteUiState.copy(
+                                            feeling = data.indexOf(
+                                                selection
+                                            )
+                                        )
+                                    )
+                                })
                         }
                     }
-//                    Text(text = selectedOption.label)
+//                    Text(text = FeelingList.feelingListString[data.indexOf(selectedOption)])
                 }
+//                Text (text = noteUiState.feeling.toString())
+//                Text(text = FeelingList.feelingListString[noteUiState.feeling])
             }
             Column {
                 Text(text = "Autre chose ?")

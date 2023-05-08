@@ -65,8 +65,7 @@ fun NoteScreen(
 fun NoteBody(noteList: List<Note>, onModifyClick: (Int) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 text = stringResource(R.string.all_my_notes),
@@ -80,30 +79,30 @@ fun NoteBody(noteList: List<Note>, onModifyClick: (Int) -> Unit) {
                         id = 0,
                         feeling = 4,
                         date = Date(),
-                        note = "Ceci est un exemple de note."
-                    )
+                        note = "Ceci est un exemple de note.",
+                    ),
+                    onModifyClick = {}
                 )
             } else {
-                NoteList(noteList = noteList)
+                NoteList(noteList = noteList, onModifyClick = { onModifyClick(it.id) })
             }
         }
     }
 }
 
 @Composable
-fun NoteList(noteList: List<Note>) {
+fun NoteList(noteList: List<Note>, onModifyClick: (Note) -> Unit) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(items = noteList, key = { it.id }) {
-            DisplayNote(note = it)
+            DisplayNote(note = it, onModifyClick = onModifyClick)
         }
     }
 }
 
 @Composable
-fun DisplayNote(note: Note) {
+fun DisplayNote(note: Note, onModifyClick: (Note) -> Unit) {
     Surface(
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier
+        color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier
             .fillMaxWidth()
             .clip(
                 RoundedCornerShape(8.dp)
@@ -123,7 +122,7 @@ fun DisplayNote(note: Note) {
                     text = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
                         .format(note.date), fontWeight = FontWeight.SemiBold
                 )
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { onModifyClick(note) }) {
                     Text(text = "Modifier")
                 }
             }

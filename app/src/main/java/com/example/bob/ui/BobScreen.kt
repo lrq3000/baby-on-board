@@ -34,16 +34,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.bob.HomeScreen
 import com.example.bob.InformationScreen
 import com.example.bob.R
 import com.example.bob.ui.compose.MesureScreen
-import com.example.bob.ui.compose.notes.NoteScreen
 import com.example.bob.ui.compose.notes.AddNoteScreen
+import com.example.bob.ui.compose.notes.NoteEditScreen
+import com.example.bob.ui.compose.notes.NoteScreen
 import com.example.bob.ui.viewModel.BobViewModel
 
 enum class BobScreen() {
@@ -55,6 +58,7 @@ enum class BobScreen() {
     CalendarList,
     Informations,
     AddNote,
+    EditNote,
     Contraction
 }
 
@@ -166,11 +170,25 @@ fun BobApp(
             composable(route = BobScreen.CalendarList.name) {
                 NoteScreen(
                     onAddButtonClicked = { navController.navigate(BobScreen.AddNote.name) },
-                    navigateToNoteUpdate = {})
+                    navigateToNoteUpdate = {
+                        navController.navigate("${BobScreen.EditNote.name}/${it}")
+                    },
+                )
             }
 
-            composable(route = BobScreen.AddNote.name) {
-                AddNoteScreen(navigateBack = { navController.popBackStack() })
+            composable(
+                route = BobScreen.AddNote.name,
+            ) {
+                AddNoteScreen(
+                    navigateBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = "${BobScreen.EditNote.name}/{noteId}",
+                arguments = listOf(navArgument("noteId") { type = NavType.IntType })
+            ) {
+                NoteEditScreen(navigateBack = { navController.popBackStack() })
             }
         }
     }

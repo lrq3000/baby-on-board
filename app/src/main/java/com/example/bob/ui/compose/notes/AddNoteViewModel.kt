@@ -10,11 +10,14 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.bob.BobApplication
 import com.example.bob.data.NotesRepository
 
-class AddNoteViewModel(private val notesRepository: NotesRepository) : ViewModel() {
+class AddNoteViewModel(
+    private val notesRepository: NotesRepository
+) : ViewModel() {
+
     var noteUiState by mutableStateOf(NoteUiState())
         private set
 
-    fun updateUiState(newNoteUiState: NoteUiState){
+    fun updateUiState(newNoteUiState: NoteUiState) {
         noteUiState = newNoteUiState.copy()
     }
 
@@ -27,7 +30,8 @@ class AddNoteViewModel(private val notesRepository: NotesRepository) : ViewModel
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BobApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BobApplication)
                 AddNoteViewModel(application.appDataContainer.notesRepository)
             }
         }

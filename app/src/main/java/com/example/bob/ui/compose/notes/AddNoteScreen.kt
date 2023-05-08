@@ -43,7 +43,7 @@ import java.util.Locale
 fun AddNoteScreen(
     navigateBack: () -> Unit,
     editingNote: Boolean = false,
-    viewModel: AddNoteViewModel = viewModel(factory = AddNoteViewModel.Factory)
+    viewModel: AddNoteViewModel = viewModel(factory = AddNoteViewModel.Factory),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -184,7 +184,13 @@ fun AddNoteBody(
         }
     }
     if (openDialog.value) {
-        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Date().time)
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = if (editingNote) {
+                noteUiState.date.time
+            } else {
+                Date().time
+            }
+        )
         DatePickerDialog(
             onDismissRequest = {
                 // Dismiss the dialog when the user clicks outside the dialog or on the back

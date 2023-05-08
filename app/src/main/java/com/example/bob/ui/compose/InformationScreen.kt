@@ -74,7 +74,7 @@ fun InformationScreen(
                     DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
                         .format(ovulationPickedDate)
                 } else {
-                    "Non défini"
+                    "Inconnue"
                 }
 
             }

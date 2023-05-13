@@ -44,6 +44,7 @@ import com.example.bob.HomeScreen
 import com.example.bob.InformationScreen
 import com.example.bob.R
 import com.example.bob.ui.compose.MesureScreen
+import com.example.bob.ui.compose.contractions.ContractionScreen
 import com.example.bob.ui.compose.notes.AddNoteScreen
 import com.example.bob.ui.compose.notes.NoteEditScreen
 import com.example.bob.ui.compose.notes.NoteScreen
@@ -126,12 +127,15 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
                     contentDescription = "Notes"
                 )
             })
-        NavigationBarItem(selected = false, onClick = { /*TODO*/ }, icon = {
-            Icon(
-                imageVector = Icons.Rounded.Timer,
-                contentDescription = "Contraction"
-            )
-        })
+        NavigationBarItem(
+            currentDestination?.hierarchy?.any { it.route == "Contraction" } == true,
+            onClick = { navController.navigate(BobScreen.Contraction.name) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Rounded.Timer,
+                    contentDescription = "Contraction"
+                )
+            })
     }
 }
 
@@ -189,6 +193,10 @@ fun BobApp(
                 arguments = listOf(navArgument("noteId") { type = NavType.IntType })
             ) {
                 NoteEditScreen(navigateBack = { navController.popBackStack() })
+            }
+
+            composable(route = BobScreen.Contraction.name) {
+                ContractionScreen()
             }
         }
     }

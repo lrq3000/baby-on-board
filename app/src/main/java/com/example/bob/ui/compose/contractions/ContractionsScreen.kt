@@ -19,6 +19,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -34,29 +37,20 @@ import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.time.temporal.ChronoUnit
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bob.data.Contraction
+import com.example.bob.ui.AppViewModelProvider
+import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.Date
+import java.util.Locale
 
-val contractions = listOf<Contraction>(
-    Contraction(LocalDateTime.now(), LocalDateTime.now().plusSeconds(83)),
-    Contraction(
-        LocalDateTime.now().plusMinutes(4),
-        LocalDateTime.now().plusMinutes(4).plusSeconds(45)
-    ),
-    Contraction(
-        LocalDateTime.now().plusMinutes(6).plusSeconds(37),
-        LocalDateTime.now().plusMinutes(6).plusSeconds(37).plusSeconds(35)
-    )
-)
-
-fun formatedHour(date: LocalDateTime): String {
-    return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(date)
+fun formatedHour(date: Date): String {
+    return DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(date)
 }
 
 fun contractionDuration(contraction: Contraction): String {
-    val seconds = ChronoUnit.SECONDS.between(contraction.startTime, contraction.endTime)
+    val seconds = contraction.startTime.time - contraction.endTime.time
     return secondToTime(seconds)
 }
 
@@ -73,26 +67,56 @@ fun secondToTime(seconds: Long): String {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 @Preview(showBackground = true)
-fun ContractionScreen(onAddButtonClicked: () -> Unit = {}) {
+fun ContractionScreen(
+    viewModel: ContractionsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val contractionUiState by viewModel.displayContractionUiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val recordingContraction: Boolean = false
+    var startTime: Date = Date()
+
+    fun onAddButtonClicked() {
+        if (recordingContraction) {
+            viewModel.contractionUiState.copy(startTime = startTime, endTime = Date())
+            coroutineScope.launch {
+                viewModel.saveContraction()
+            }
+        } else {
+            startTime = Date()
+        }
+    }
+
     Scaffold(floatingActionButton = {
         LargeFloatingActionButton(
             onClick = { onAddButtonClicked() },
+            containerColor = if (recordingContraction) {
+                Color.Red
+            } else {
+                MaterialTheme.colorScheme.primaryContainer
+            },
             shape = CircleShape,
         ) {
             Icon(imageVector = Icons.Filled.Add, contentDescription = "Add contraction")
         }
     }, floatingActionButtonPosition = FabPosition.Center) {
-        ContractionBody(
-            sortedContraction = contractions.sortedByDescending { it.startTime }
-        )
+        if (contractionUiState.contractionList.isNotEmpty()) {
+            ContractionBody(sortedContraction = contractionUiState.contractionList.sortedByDescending { it.startTime }, contractionUiState)
+        } else {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(32.dp)
+            ) {
+                Text(text = "Appuyez sur le bouton + quand votre première contraction commence")
+            }
+        }
     }
 }
 
 @Composable
-fun ContractionBody(sortedContraction: List<Contraction>) {
+fun ContractionBody(sortedContraction: List<Contraction>, contractionUiState: ContractionUiState) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Row(
             modifier = Modifier
@@ -116,17 +140,19 @@ fun ContractionBody(sortedContraction: List<Contraction>) {
             var timeBetwinContractionDuration: Long? = null
             if (index > 0) {
                 timeBetwinContractionDuration =
-                    ChronoUnit.SECONDS.between(
-                        contraction.startTime,
-                        sortedContraction[index - 1].startTime
-                    )
+//                    ChronoUnit.SECONDS.between(
+//                        contraction.startTime,
+//                        sortedContraction[index - 1].startTime
+//                    )
+                    contraction.startTime.time - sortedContraction[index - 1].startTime.time
             }
             if (index != 0) {
                 TimeBetwinContractions(
                     timeBetwinContractionDuration = timeBetwinContractionDuration!!
                 )
             }
-            ContractionRow(contraction)
+            contractionNumber = contractionUiState .indexOf(contraction) + 1
+            ContractionRow(contraction, contractionNumber = )
         }
     }
 }
@@ -134,6 +160,7 @@ fun ContractionBody(sortedContraction: List<Contraction>) {
 @Composable
 fun ContractionRow(
     contraction: Contraction,
+    contractionNumber : Int
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(.5f),
@@ -161,21 +188,18 @@ fun ContractionRow(
         )
         Text(text = (contractions.indexOf(contraction) + 1).toString(),
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .drawWithCache {
-                    val brush = Brush.linearGradient(
-                        listOf(
-                            Color(color1), Color(color2)
-                        ),
-                        end = Offset(x = 0f, 50f)
+            modifier = Modifier.drawWithCache {
+                val brush = Brush.linearGradient(
+                    listOf(
+                        Color(color1), Color(color2)
+                    ), end = Offset(x = 0f, 50f)
+                )
+                onDrawBehind {
+                    drawCircle(
+                        brush = brush, radius = 45f,
                     )
-                    onDrawBehind {
-                        drawCircle(
-                            brush = brush, radius = 45f,
-                        )
-                    }
                 }
-        )
+            })
     }
 }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.bob.BobApplication
+import com.example.bob.ui.compose.contractions.ContractionsViewModel
 import com.example.bob.ui.compose.notes.AddNoteViewModel
 import com.example.bob.ui.compose.notes.NoteEditViewModel
 import com.example.bob.ui.compose.notes.NoteViewModel
@@ -14,14 +15,6 @@ import com.example.bob.ui.viewModel.BobViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
-        // Initializer for ItemEditViewModel
-
-//        initializer {
-//            ItemEditViewModel(
-//                this.createSavedStateHandle()
-//            )
-//        }
-
         // Initializer for ItemEntryViewModel
         initializer {
             AddNoteViewModel(bobApplication().appDataContainer.notesRepository)
@@ -35,18 +28,13 @@ object AppViewModelProvider {
             NoteViewModel(bobApplication().appDataContainer.notesRepository)
         }
 
-        // Initializer for ItemDetailsViewModel
-
-//        initializer {
-//            ItemDetailsViewModel(
-//                this.createSavedStateHandle()
-//            )
-//        }
-
-
         // Initializer for HomeViewModel
         initializer {
             BobViewModel(bobApplication().userInformationsRepository)
+        }
+
+        initializer {
+            ContractionsViewModel(bobApplication().appDataContainer.contactionsRepository)
         }
     }
 }

@@ -8,17 +8,18 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import java.util.Date
 
-@Database(entities = [Note::class], version = 4, exportSchema = false)
+@Database(entities = [Note::class, Contraction::class], version = 5, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class BobDatabase : RoomDatabase() {
     abstract fun notesDao(): NotesDao
+    abstract fun contractionDao(): ContractionsDao
 
     companion object {
         @Volatile
         private var Instance: BobDatabase? = null
         fun getDatabase(context: Context): BobDatabase {
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, BobDatabase::class.java, "notes_database")
+                Room.databaseBuilder(context, BobDatabase::class.java, "bob_database")
                     .fallbackToDestructiveMigration().build().also { Instance = it }
             }
         }

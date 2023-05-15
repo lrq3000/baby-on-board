@@ -1,6 +1,7 @@
 package com.example.bob.ui.compose.contractions
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
@@ -21,7 +23,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -72,16 +77,21 @@ fun ContractionScreen(
 ) {
     val contractionUiState by viewModel.displayContractionUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val recordingContraction: Boolean = false
-    var startTime: Date = Date()
+    val recordingContraction = remember { mutableStateOf(false) }
+    var startTime by remember { mutableStateOf(Date()) }
 
     fun onAddButtonClicked() {
-        if (recordingContraction) {
+        Log.e("fonction", startTime.toString())
+        if (recordingContraction.value) {
+            Log.e("fin", startTime.toString())
             viewModel.contractionUiState.copy(startTime = startTime, endTime = Date())
             coroutineScope.launch {
                 viewModel.saveContraction()
             }
+            recordingContraction.value = false
         } else {
+            Log.e("debut", startTime.toString())
+            recordingContraction.value = true
             startTime = Date()
         }
     }
@@ -89,18 +99,28 @@ fun ContractionScreen(
     Scaffold(floatingActionButton = {
         LargeFloatingActionButton(
             onClick = { onAddButtonClicked() },
-            containerColor = if (recordingContraction) {
-                Color.Red
+            containerColor = if (recordingContraction.value) {
+                MaterialTheme.colorScheme.error
             } else {
                 MaterialTheme.colorScheme.primaryContainer
             },
             shape = CircleShape,
         ) {
-            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add contraction")
+            if (recordingContraction.value) {
+                Icon(
+                    imageVector = Icons.Filled.HourglassBottom,
+                    contentDescription = "End contraction"
+                )
+            } else {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add contraction")
+            }
         }
     }, floatingActionButtonPosition = FabPosition.Center) {
         if (contractionUiState.contractionList.isNotEmpty()) {
-            ContractionBody(sortedContraction = contractionUiState.contractionList.sortedByDescending { it.startTime }, contractionUiState)
+            ContractionBody(
+                sortedContraction = contractionUiState.contractionList.sortedByDescending { it.startTime },
+                contractionUiState.contractionList
+            )
         } else {
             Column(
                 Modifier
@@ -114,7 +134,7 @@ fun ContractionScreen(
 }
 
 @Composable
-fun ContractionBody(sortedContraction: List<Contraction>, contractionUiState: ContractionUiState) {
+fun ContractionBody(sortedContraction: List<Contraction>, contractions: List<Contraction>) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -151,8 +171,7 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractionUiState: Co
                     timeBetwinContractionDuration = timeBetwinContractionDuration!!
                 )
             }
-            contractionNumber = contractionUiState .indexOf(contraction) + 1
-            ContractionRow(contraction, contractionNumber = )
+            ContractionRow(contraction, contractionNumber = contractions.indexOf(contraction) + 1)
         }
     }
 }
@@ -160,7 +179,7 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractionUiState: Co
 @Composable
 fun ContractionRow(
     contraction: Contraction,
-    contractionNumber : Int
+    contractionNumber: Int
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(.5f),
@@ -186,7 +205,7 @@ fun ContractionRow(
             MaterialTheme.colorScheme.primary.toArgb().green,
             MaterialTheme.colorScheme.primary.toArgb().blue
         )
-        Text(text = (contractions.indexOf(contraction) + 1).toString(),
+        Text(text = contractionNumber.toString(),
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.drawWithCache {
                 val brush = Brush.linearGradient(

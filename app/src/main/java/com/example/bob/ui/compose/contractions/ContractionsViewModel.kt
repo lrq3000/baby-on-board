@@ -33,6 +33,10 @@ class ContractionsViewModel(private val contactionsRepository: ContactionsReposi
     suspend fun saveContraction() {
         contactionsRepository.insertContraction(contractionUiState.toContraction())
     }
+
+    fun updateUiState(newContractionUiState: ContractionUiState) {
+        contractionUiState = newContractionUiState.copy()
+    }
 }
 
 data class DisplayContractionUiState(val contractionList: List<Contraction> = listOf())

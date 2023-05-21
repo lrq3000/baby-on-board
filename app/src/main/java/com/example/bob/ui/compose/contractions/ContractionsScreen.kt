@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
@@ -46,20 +47,26 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bob.data.Contraction
 import com.example.bob.ui.AppViewModelProvider
 import kotlinx.coroutines.launch
-import java.text.DateFormat
-import java.util.Date
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 
-fun formatedHour(date: Date): String {
-    return DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(date)
+fun formatedHour(date: LocalDateTime): String {
+//    return DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(date)
+    return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.FRANCE)
+        .format(date)
 }
 
 fun contractionDuration(contraction: Contraction): String {
-    val seconds = contraction.startTime.time - contraction.endTime.time
+    val seconds = contraction.contractionDuration.seconds
     return secondToTime(seconds)
 }
 
 fun secondToTime(seconds: Long): String {
+    Log.e("second", seconds.toString())
     val min = ((seconds / 60) % 60)
     val sec = seconds % 60
     return if (sec < 10) {
@@ -78,21 +85,24 @@ fun ContractionScreen(
     val contractionUiState by viewModel.displayContractionUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val recordingContraction = remember { mutableStateOf(false) }
-    var startTime by remember { mutableStateOf(Date()) }
+    var startTime by remember { mutableStateOf(LocalDateTime.now()) }
+    val onValueChange = viewModel::updateUiState
 
     fun onAddButtonClicked() {
-        Log.e("fonction", startTime.toString())
         if (recordingContraction.value) {
-            Log.e("fin", startTime.toString())
-            viewModel.contractionUiState.copy(startTime = startTime, endTime = Date())
+            onValueChange(
+                viewModel.contractionUiState.copy(
+                    startTime = startTime,
+                    contractionDuration = Duration.between(startTime, LocalDateTime.now())
+                )
+            )
             coroutineScope.launch {
                 viewModel.saveContraction()
             }
             recordingContraction.value = false
         } else {
-            Log.e("debut", startTime.toString())
+            startTime = LocalDateTime.now()
             recordingContraction.value = true
-            startTime = Date()
         }
     }
 
@@ -109,8 +119,9 @@ fun ContractionScreen(
             if (recordingContraction.value) {
                 Icon(
                     imageVector = Icons.Filled.HourglassBottom,
-                    contentDescription = "End contraction"
-                )
+              contentDescription = "End contraction"
+            )
+                //                   Text(text = Duration.between(startTime, LocalDateTime.now()).toString())
             } else {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add contraction")
             }
@@ -118,7 +129,7 @@ fun ContractionScreen(
     }, floatingActionButtonPosition = FabPosition.Center) {
         if (contractionUiState.contractionList.isNotEmpty()) {
             ContractionBody(
-                sortedContraction = contractionUiState.contractionList.sortedByDescending { it.startTime },
+                sortedContraction = contractionUiState.contractionList.sortedByDescending { it.id },
                 contractionUiState.contractionList
             )
         } else {
@@ -147,7 +158,7 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractions: List<Con
                 Text(text = "Début")
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(text = "Durée")
-                Spacer(modifier = Modifier.width(24.dp))
+                Spacer(modifier = Modifier.width(34.dp))
             }
             Spacer(modifier = Modifier.fillMaxWidth(.14f))
             Text(
@@ -160,11 +171,11 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractions: List<Con
             var timeBetwinContractionDuration: Long? = null
             if (index > 0) {
                 timeBetwinContractionDuration =
-//                    ChronoUnit.SECONDS.between(
-//                        contraction.startTime,
-//                        sortedContraction[index - 1].startTime
-//                    )
-                    contraction.startTime.time - sortedContraction[index - 1].startTime.time
+                    ChronoUnit.SECONDS.between(
+                        contraction.startTime,
+                        sortedContraction[index - 1].startTime
+                    )
+//                contraction.startTime.second.toLong() - sortedContraction[index - 1].startTime.second.toLong()
             }
             if (index != 0) {
                 TimeBetwinContractions(
@@ -183,14 +194,19 @@ fun ContractionRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(.5f),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.End
     ) {
-        Text(text = formatedHour(contraction.startTime))
+        Text(
+            text = formatedHour(contraction.startTime),
+            color = Color.Gray,
+            fontSize = 10.sp
+        )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = contractionDuration(contraction),
             fontStyle = FontStyle.Italic,
+            fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.width(24.dp))
         val color1 = android.graphics.Color.argb(
@@ -231,9 +247,9 @@ fun TimeBetwinContractions(timeBetwinContractionDuration: Long) {
     ) {
         Spacer(modifier = Modifier.fillMaxWidth(.57f))
         Text(
-            secondToTime(timeBetwinContractionDuration),
+            secondToTime(timeBetwinContractionDuration.toLong()),
             color = MaterialTheme.colorScheme.secondary,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.ExtraBold,
         )
     }
 }

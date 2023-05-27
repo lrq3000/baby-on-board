@@ -1,5 +1,6 @@
 package com.example.bob
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -28,9 +29,13 @@ import com.example.bob.ui.viewModel.BobViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.temporal.TemporalField
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,9 +49,9 @@ fun InformationScreen(
         var periodPickedDate by remember {
             mutableStateOf(
                 if (bobUiState.userLastPeriodsDate !== "") {
-                    LocalDate.parse(bobUiState.userLastPeriodsDate)
+                    LocalDateTime.parse(bobUiState.userLastPeriodsDate)
                 } else {
-                    LocalDate.now()
+                    LocalDateTime.now()
                 },
             )
         }
@@ -56,7 +61,7 @@ fun InformationScreen(
                 if (bobUiState.userLastOvulationDate == "null" || bobUiState.userLastOvulationDate == null || bobUiState.userLastOvulationDate == "") {
                     null
                 } else {
-                    LocalDate.parse(bobUiState.userLastOvulationDate)
+                    LocalDateTime.parse(bobUiState.userLastOvulationDate)
                 },
             )
         }
@@ -84,6 +89,13 @@ fun InformationScreen(
 
         val periodDateDialogState = rememberMaterialDialogState()
         val ovulationDateDialogState = rememberMaterialDialogState()
+
+        val openDialog = remember { mutableStateOf(false) }
+
+        var initialDate by remember { mutableStateOf<Long>(0) }
+
+        var datePickerTypeIsPeriod by remember { mutableStateOf(false) }
+
 
         Column(
             modifier = Modifier
@@ -151,14 +163,24 @@ fun InformationScreen(
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { periodDateDialogState.show() }) {
+                        IconButton(onClick = {
+                            initialDate = Instant.now().toEpochMilli()
+//                            Log.e("instant", initialDate.toString())
+                            Log.e("localdatetime", (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000).toString())
+                            Log.e("localinstant", (LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()).toString())
+                            datePickerTypeIsPeriod = true
+                            openDialog.value = true
+                        }) {
                             Icon(
                                 imageVector = Icons.Rounded.EditCalendar,
                                 contentDescription = "Edit last period date",
                             )
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = periodFormattedDate, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            text = periodFormattedDate,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
 
                     Spacer(modifier = Modifier.size(32.dp))
@@ -170,14 +192,26 @@ fun InformationScreen(
                         )
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { ovulationDateDialogState.show() }) {
+//                        IconButton(onClick = { ovulationDateDialogState.show() }) {
+                        IconButton(onClick = {
+//                            datePickerState.setSelection(
+////                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
+//                                Instant.now().toEpochMilli()
+//                            )
+
+                            datePickerTypeIsPeriod = false
+                            openDialog.value = true
+                        }) {
                             Icon(
                                 imageVector = Icons.Rounded.EditCalendar,
                                 contentDescription = "Edit last ovulation date",
                             )
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = ovulationFormattedDate, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            text = ovulationFormattedDate,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                         if (ovulationPickedDate != null) {
                             IconButton(onClick = { ovulationPickedDate = null }) {
                                 Icon(
@@ -210,58 +244,158 @@ fun InformationScreen(
                 }
             }
         }
-        MaterialDialog(dialogState = periodDateDialogState, buttons = {
-            positiveButton(
-                text = stringResource(R.string.validate),
-                TextStyle(color = MaterialTheme.colorScheme.primary)
-            )
-            negativeButton(
-                text = stringResource(R.string.cancel),
-                TextStyle(color = MaterialTheme.colorScheme.primary)
-            ) {}
-        }, shape = RoundedCornerShape(16.dp)) {
-            datepicker(
-                initialDate = periodPickedDate,
-                title = stringResource(R.string.pick_a_date),
-                allowedDateValidator = {
-                    it <= LocalDate.now()
+//        MaterialDialog(dialogState = periodDateDialogState, buttons = {
+//            positiveButton(
+//                text = stringResource(R.string.validate),
+//                TextStyle(color = MaterialTheme.colorScheme.primary)
+//            )
+//            negativeButton(
+//                text = stringResource(R.string.cancel),
+//                TextStyle(color = MaterialTheme.colorScheme.primary)
+//            ) {}
+//        }, shape = RoundedCornerShape(16.dp)) {
+//            datepicker(
+//                initialDate = periodPickedDate,
+//                title = stringResource(R.string.pick_a_date),
+//                allowedDateValidator = {
+//                    it <= LocalDate.now()
+//                },
+//                locale = Locale.FRANCE,
+//                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
+//                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+//                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
+//                    headerTextColor = MaterialTheme.colorScheme.onPrimaryContainer
+//                ),
+//            ) {
+//                periodPickedDate = it
+//            }
+//        }
+//
+//        MaterialDialog(dialogState = ovulationDateDialogState, buttons = {
+//            positiveButton(
+//                text = stringResource(R.string.validate),
+//                TextStyle(color = MaterialTheme.colorScheme.primary)
+//            )
+//            negativeButton(
+//                text = stringResource(R.string.cancel),
+//                TextStyle(color = MaterialTheme.colorScheme.primary)
+//            ) {}
+//        }, shape = RoundedCornerShape(16.dp)) {
+//            datepicker(
+//                initialDate = ovulationPickedDate ?: LocalDate.now(),
+//                title = stringResource(R.string.pick_a_date),
+//                allowedDateValidator = {
+//                    it <= LocalDate.now()
+//                },
+//                locale = Locale.FRANCE,
+//                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
+//                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+//                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
+//                    headerTextColor = MaterialTheme.colorScheme.primary
+//                ),
+//            ) {
+//                ovulationPickedDate = it
+//            }
+//        }
+
+//        val datePickerState = rememberDatePickerState(
+//            initialSelectedDateMillis = if (openDialog.value) {
+//                noteUiState.date.toEpochDay()
+//            } else {
+//                LocalDate.now().toEpochDay()
+//            }
+//        )
+        if (openDialog.value) {
+            val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialDate)
+            DatePickerDialog(
+                confirmButton = {
+                    TextButton(onClick = {
+                        openDialog.value = false
+                        if (datePickerTypeIsPeriod) {
+                            periodPickedDate = datePickerState.selectedDateMillis?.let {
+                                LocalDateTime.ofEpochSecond(
+                                    it / 1000, 0, ZoneOffset.UTC
+                                )
+                            }
+                        } else {
+                            ovulationPickedDate = datePickerState.selectedDateMillis?.let {
+                                LocalDateTime.ofEpochSecond(
+                                    it / 1000, 0, ZoneOffset.UTC
+                                )
+                            }
+                        }
+
+                    }) {
+                        Text(text = "OK")
+                    }
                 },
-                locale = Locale.FRANCE,
-                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
-                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
-                    headerTextColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ),
+                dismissButton = {
+                    TextButton(onClick = { openDialog.value = false }) {
+                        Text("Annuler")
+                    }
+                },
+                onDismissRequest = { openDialog.value = false }
             ) {
-                periodPickedDate = it
+                DatePicker(
+                    title = {
+                        Text(
+                            text = if (datePickerTypeIsPeriod) {
+                                "Date de vos dernière règles"
+                            } else {
+                                "Date de votre ovulation"
+                            }, modifier = Modifier.padding(24.dp)
+                        )
+                    },
+                    state = datePickerState,
+                    dateValidator = {
+                        it <= LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000
+                    }
+                )
             }
         }
 
-        MaterialDialog(dialogState = ovulationDateDialogState, buttons = {
-            positiveButton(
-                text = stringResource(R.string.validate),
-                TextStyle(color = MaterialTheme.colorScheme.primary)
-            )
-            negativeButton(
-                text = stringResource(R.string.cancel),
-                TextStyle(color = MaterialTheme.colorScheme.primary)
-            ) {}
-        }, shape = RoundedCornerShape(16.dp)) {
-            datepicker(
-                initialDate = ovulationPickedDate ?: LocalDate.now(),
-                title = stringResource(R.string.pick_a_date),
-                allowedDateValidator = {
-                    it <= LocalDate.now()
-                },
-                locale = Locale.FRANCE,
-                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
-                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
-                    headerTextColor = MaterialTheme.colorScheme.primary
-                ),
-            ) {
-                ovulationPickedDate = it
-            }
-        }
     }
 }
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun dDatePickerDialog(openDialog: MutableState<Boolean>) {
+//    val datePickerState = rememberDatePickerState(
+//        initialSelectedDateMillis = if (openDialog.value) {
+//            noteUiState.date.toEpochDay()
+//        } else {
+//            LocalDate.now().toEpochDay()
+//        }
+//    )
+//    DatePickerDialog(
+//        onDismissRequest = {
+//            // Dismiss the dialog when the user clicks outside the dialog or on the back
+//            // button. If you want to disable that functionality, simply use an empty
+//            // onDismissRequest.
+//            openDialog.value = false
+//        },
+//        confirmButton = {
+//            TextButton(
+//                onClick = {
+//                    openDialog.value = false
+//                    onValueChange(noteUiState.copy(date = Date(datePickerState.selectedDateMillis!!)))
+//                }
+//            ) {
+//                Text("OK")
+//            }
+//        },
+//        dismissButton = {
+//            TextButton(
+//                onClick = {
+//                    openDialog.value = false
+//                }
+//            ) {
+//                Text("Annuler")
+//            }
+//        }
+//    ) {
+//        DatePicker(
+//            state = datePickerState,
+//            title = { Text(text = "Modifier la date", modifier = Modifier.padding(24.dp)) })
+//    }
+//}

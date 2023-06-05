@@ -38,9 +38,8 @@ fun MesureScreen(bobUiState: BobUiState) {
             LocalDateTime.ofEpochSecond(bobUiState.userLastOvulationDate, 0, ZoneOffset.UTC)
         }
 
-    val SGcount = ChronoUnit.DAYS.between(ovulationDate, LocalDate.now()) / 7
+    val SGcount = ChronoUnit.DAYS.between(ovulationDate, LocalDateTime.now()) / 7
     val pagerState = rememberPagerState()
-    val scope = rememberCoroutineScope()
 
     val weeksInfos = when (pagerState.currentPage + 2) {
         2 -> listOf(R.drawable._2, "Un retard.. ?", "0,2mm", "/")

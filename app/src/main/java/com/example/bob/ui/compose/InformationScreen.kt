@@ -26,7 +26,6 @@ import com.example.bob.dataStore.UserInformations
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.viewModel.BobUiState
 import com.example.bob.ui.viewModel.BobViewModel
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -53,10 +52,12 @@ fun InformationScreen(
 
         var ovulationPickedDate by remember {
             mutableStateOf(
-                if (bobUiState.userLastOvulationDate == null) {
-                    null
-                } else {
-                    LocalDateTime.ofEpochSecond(bobUiState.userLastOvulationDate, 0, ZoneOffset.UTC)
+                bobUiState.userLastOvulationDate.let {
+                    if (it == null || it == 0L) {
+                        null
+                    } else {
+                        LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC)
+                    }
                 }
             )
         }
@@ -155,17 +156,7 @@ fun InformationScreen(
                     Spacer(modifier = Modifier.size(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = {
-                            initialDate = Instant.now().toEpochMilli()
-                            Log.e(
-                                "localdatetime",
-                                (LocalDateTime.now()
-                                    .toEpochSecond(ZoneOffset.UTC) * 1000).toString()
-                            )
-                            Log.e(
-                                "localinstant",
-                                (LocalDateTime.now().toInstant(ZoneOffset.UTC)
-                                    .toEpochMilli()).toString()
-                            )
+                            initialDate = periodPickedDate.toEpochSecond(ZoneOffset.UTC) * 1000
                             datePickerTypeIsPeriod = true
                             openDialog.value = true
                         }) {
@@ -191,6 +182,9 @@ fun InformationScreen(
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = {
+                            initialDate =
+                                ovulationPickedDate?.toInstant(ZoneOffset.UTC)?.toEpochMilli()
+                                    ?: (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000)
                             datePickerTypeIsPeriod = false
                             openDialog.value = true
                         }) {
@@ -219,7 +213,7 @@ fun InformationScreen(
                         userName,
                         periodPickedDate.toEpochSecond(ZoneOffset.UTC),
                         ovulationPickedDate?.toEpochSecond(
-                            ZoneOffset.MAX
+                            ZoneOffset.UTC
                         )
                     )
                     Column(

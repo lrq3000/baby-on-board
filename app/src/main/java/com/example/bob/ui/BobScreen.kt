@@ -40,10 +40,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.bob.HomeScreen
-import com.example.bob.InformationScreen
+import com.example.bob.ui.compose.HomeScreen
+import com.example.bob.ui.compose.InformationScreen
 import com.example.bob.R
-import com.example.bob.ui.compose.MesureScreen
+import com.example.bob.ui.compose.mesures.MesureScreen
 import com.example.bob.ui.compose.contractions.ContractionScreen
 import com.example.bob.ui.compose.notes.AddNoteScreen
 import com.example.bob.ui.compose.notes.NoteEditScreen

@@ -1,4 +1,4 @@
-package com.example.bob
+package com.example.bob.ui.compose
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
@@ -15,27 +15,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bob.R
 import com.example.bob.dataStore.UserInformations
 import com.example.bob.ui.theme.BoBTheme
 import com.example.bob.ui.viewModel.BobUiState
 import com.example.bob.ui.viewModel.BobViewModel
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.time.temporal.TemporalField
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,8 +43,8 @@ fun InformationScreen(
     BoBTheme {
         var periodPickedDate by remember {
             mutableStateOf(
-                if (bobUiState.userLastPeriodsDate !== "") {
-                    LocalDateTime.parse(bobUiState.userLastPeriodsDate)
+                if (bobUiState.userLastPeriodsDate != 0L) {
+                    LocalDateTime.ofEpochSecond(bobUiState.userLastPeriodsDate, 0, ZoneOffset.UTC)
                 } else {
                     LocalDateTime.now()
                 },
@@ -58,11 +53,11 @@ fun InformationScreen(
 
         var ovulationPickedDate by remember {
             mutableStateOf(
-                if (bobUiState.userLastOvulationDate == "null" || bobUiState.userLastOvulationDate == null || bobUiState.userLastOvulationDate == "") {
+                if (bobUiState.userLastOvulationDate == null) {
                     null
                 } else {
-                    LocalDateTime.parse(bobUiState.userLastOvulationDate)
-                },
+                    LocalDateTime.ofEpochSecond(bobUiState.userLastOvulationDate, 0, ZoneOffset.UTC)
+                }
             )
         }
 
@@ -86,9 +81,6 @@ fun InformationScreen(
         }
 
         var userName by rememberSaveable { mutableStateOf(bobUiState.userName) }
-
-        val periodDateDialogState = rememberMaterialDialogState()
-        val ovulationDateDialogState = rememberMaterialDialogState()
 
         val openDialog = remember { mutableStateOf(false) }
 
@@ -134,7 +126,6 @@ fun InformationScreen(
                         )
                     }
                 }
-//                Spacer(modifier = Modifier.size(16.dp))
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -165,9 +156,16 @@ fun InformationScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = {
                             initialDate = Instant.now().toEpochMilli()
-//                            Log.e("instant", initialDate.toString())
-                            Log.e("localdatetime", (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000).toString())
-                            Log.e("localinstant", (LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()).toString())
+                            Log.e(
+                                "localdatetime",
+                                (LocalDateTime.now()
+                                    .toEpochSecond(ZoneOffset.UTC) * 1000).toString()
+                            )
+                            Log.e(
+                                "localinstant",
+                                (LocalDateTime.now().toInstant(ZoneOffset.UTC)
+                                    .toEpochMilli()).toString()
+                            )
                             datePickerTypeIsPeriod = true
                             openDialog.value = true
                         }) {
@@ -184,7 +182,7 @@ fun InformationScreen(
                     }
 
                     Spacer(modifier = Modifier.size(32.dp))
-                    Column() {
+                    Column {
                         Text(text = stringResource(R.string.ask_last_ovulation))
                         Text(
                             text = stringResource(R.string.only_if_sure),
@@ -192,13 +190,7 @@ fun InformationScreen(
                         )
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
-//                        IconButton(onClick = { ovulationDateDialogState.show() }) {
                         IconButton(onClick = {
-//                            datePickerState.setSelection(
-////                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
-//                                Instant.now().toEpochMilli()
-//                            )
-
                             datePickerTypeIsPeriod = false
                             openDialog.value = true
                         }) {
@@ -224,7 +216,11 @@ fun InformationScreen(
 
                     Spacer(modifier = Modifier.size(32.dp))
                     val data = UserInformations(
-                        userName, periodPickedDate.toString(), ovulationPickedDate.toString()
+                        userName,
+                        periodPickedDate.toEpochSecond(ZoneOffset.UTC),
+                        ovulationPickedDate?.toEpochSecond(
+                            ZoneOffset.MAX
+                        )
                     )
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -239,163 +235,48 @@ fun InformationScreen(
                             Text(text = stringResource(R.string.save))
                         }
                     }
-
-
                 }
             }
         }
-//        MaterialDialog(dialogState = periodDateDialogState, buttons = {
-//            positiveButton(
-//                text = stringResource(R.string.validate),
-//                TextStyle(color = MaterialTheme.colorScheme.primary)
-//            )
-//            negativeButton(
-//                text = stringResource(R.string.cancel),
-//                TextStyle(color = MaterialTheme.colorScheme.primary)
-//            ) {}
-//        }, shape = RoundedCornerShape(16.dp)) {
-//            datepicker(
-//                initialDate = periodPickedDate,
-//                title = stringResource(R.string.pick_a_date),
-//                allowedDateValidator = {
-//                    it <= LocalDate.now()
-//                },
-//                locale = Locale.FRANCE,
-//                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
-//                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-//                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
-//                    headerTextColor = MaterialTheme.colorScheme.onPrimaryContainer
-//                ),
-//            ) {
-//                periodPickedDate = it
-//            }
-//        }
-//
-//        MaterialDialog(dialogState = ovulationDateDialogState, buttons = {
-//            positiveButton(
-//                text = stringResource(R.string.validate),
-//                TextStyle(color = MaterialTheme.colorScheme.primary)
-//            )
-//            negativeButton(
-//                text = stringResource(R.string.cancel),
-//                TextStyle(color = MaterialTheme.colorScheme.primary)
-//            ) {}
-//        }, shape = RoundedCornerShape(16.dp)) {
-//            datepicker(
-//                initialDate = ovulationPickedDate ?: LocalDate.now(),
-//                title = stringResource(R.string.pick_a_date),
-//                allowedDateValidator = {
-//                    it <= LocalDate.now()
-//                },
-//                locale = Locale.FRANCE,
-//                colors = com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults.colors(
-//                    headerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-//                    dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
-//                    headerTextColor = MaterialTheme.colorScheme.primary
-//                ),
-//            ) {
-//                ovulationPickedDate = it
-//            }
-//        }
-
-//        val datePickerState = rememberDatePickerState(
-//            initialSelectedDateMillis = if (openDialog.value) {
-//                noteUiState.date.toEpochDay()
-//            } else {
-//                LocalDate.now().toEpochDay()
-//            }
-//        )
         if (openDialog.value) {
             val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialDate)
-            DatePickerDialog(
-                confirmButton = {
-                    TextButton(onClick = {
-                        openDialog.value = false
-                        if (datePickerTypeIsPeriod) {
-                            periodPickedDate = datePickerState.selectedDateMillis?.let {
-                                LocalDateTime.ofEpochSecond(
-                                    it / 1000, 0, ZoneOffset.UTC
-                                )
-                            }
-                        } else {
-                            ovulationPickedDate = datePickerState.selectedDateMillis?.let {
-                                LocalDateTime.ofEpochSecond(
-                                    it / 1000, 0, ZoneOffset.UTC
-                                )
-                            }
+            DatePickerDialog(confirmButton = {
+                TextButton(onClick = {
+                    openDialog.value = false
+                    if (datePickerTypeIsPeriod) {
+                        periodPickedDate = datePickerState.selectedDateMillis?.let {
+                            LocalDateTime.ofEpochSecond(
+                                it / 1000, 0, ZoneOffset.UTC
+                            )
                         }
+                    } else {
+                        ovulationPickedDate = datePickerState.selectedDateMillis?.let {
+                            LocalDateTime.ofEpochSecond(
+                                it / 1000, 0, ZoneOffset.UTC
+                            )
+                        }
+                    }
 
-                    }) {
-                        Text(text = "OK")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { openDialog.value = false }) {
-                        Text("Annuler")
-                    }
-                },
-                onDismissRequest = { openDialog.value = false }
-            ) {
-                DatePicker(
-                    title = {
-                        Text(
-                            text = if (datePickerTypeIsPeriod) {
-                                "Date de vos dernière règles"
-                            } else {
-                                "Date de votre ovulation"
-                            }, modifier = Modifier.padding(24.dp)
-                        )
-                    },
-                    state = datePickerState,
-                    dateValidator = {
-                        it <= LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000
-                    }
-                )
+                }) {
+                    Text(text = "OK")
+                }
+            }, dismissButton = {
+                TextButton(onClick = { openDialog.value = false }) {
+                    Text("Annuler")
+                }
+            }, onDismissRequest = { openDialog.value = false }) {
+                DatePicker(title = {
+                    Text(
+                        text = if (datePickerTypeIsPeriod) {
+                            "Date de vos dernière règles"
+                        } else {
+                            "Date de votre ovulation"
+                        }, modifier = Modifier.padding(24.dp)
+                    )
+                }, state = datePickerState, dateValidator = {
+                    it <= LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000
+                })
             }
         }
-
     }
 }
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun dDatePickerDialog(openDialog: MutableState<Boolean>) {
-//    val datePickerState = rememberDatePickerState(
-//        initialSelectedDateMillis = if (openDialog.value) {
-//            noteUiState.date.toEpochDay()
-//        } else {
-//            LocalDate.now().toEpochDay()
-//        }
-//    )
-//    DatePickerDialog(
-//        onDismissRequest = {
-//            // Dismiss the dialog when the user clicks outside the dialog or on the back
-//            // button. If you want to disable that functionality, simply use an empty
-//            // onDismissRequest.
-//            openDialog.value = false
-//        },
-//        confirmButton = {
-//            TextButton(
-//                onClick = {
-//                    openDialog.value = false
-//                    onValueChange(noteUiState.copy(date = Date(datePickerState.selectedDateMillis!!)))
-//                }
-//            ) {
-//                Text("OK")
-//            }
-//        },
-//        dismissButton = {
-//            TextButton(
-//                onClick = {
-//                    openDialog.value = false
-//                }
-//            ) {
-//                Text("Annuler")
-//            }
-//        }
-//    ) {
-//        DatePicker(
-//            state = datePickerState,
-//            title = { Text(text = "Modifier la date", modifier = Modifier.padding(24.dp)) })
-//    }
-//}

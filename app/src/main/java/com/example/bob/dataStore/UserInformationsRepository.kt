@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,8 +17,8 @@ class UserInformationsRepository(
 ) {
     private companion object {
         val USER_NAME = stringPreferencesKey("user_name")
-        val LAST_PERIOD_DATE = stringPreferencesKey("last_period_date")
-        val LAST_OVULATION_DATE = stringPreferencesKey("last_ovulation_date")
+        val LAST_PERIOD_DATE = longPreferencesKey("last_period_date")
+        val LAST_OVULATION_DATE = longPreferencesKey("last_ovulation_date")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -44,8 +45,8 @@ class UserInformationsRepository(
         }
     }.map { preferences ->
         val userName = preferences[USER_NAME] ?: ""
-        val lastPeriodDate = preferences[LAST_PERIOD_DATE] ?: ""
-        val lastOvulationDate = preferences[LAST_OVULATION_DATE] ?: ""
+        val lastPeriodDate = preferences[LAST_PERIOD_DATE] ?: 0
+        val lastOvulationDate = preferences[LAST_OVULATION_DATE]
 
         UserInformations(userName, lastPeriodDate, lastOvulationDate)
     }
@@ -54,15 +55,15 @@ class UserInformationsRepository(
         dataStore.edit { preferences ->
             preferences[USER_NAME] = userInformations.userName
             preferences[LAST_PERIOD_DATE] = userInformations.lastPeriodDate
-            preferences[LAST_OVULATION_DATE] = userInformations.lastOvulationDate ?: ""
+            preferences[LAST_OVULATION_DATE] = userInformations.lastOvulationDate ?: 0
         }
     }
 
     fun getDetails() = dataStore.data.map {
         UserInformations(
             userName = it[USER_NAME] ?: "",
-            lastPeriodDate = it[LAST_PERIOD_DATE] ?: "",
-            lastOvulationDate = it[LAST_OVULATION_DATE] ?: ""
+            lastPeriodDate = it[LAST_PERIOD_DATE] ?: 0,
+            lastOvulationDate = it[LAST_OVULATION_DATE]
         )
     }
 }

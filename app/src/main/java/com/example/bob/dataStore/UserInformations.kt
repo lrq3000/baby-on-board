@@ -4,6 +4,6 @@ import java.time.LocalDate
 
 data class UserInformations(
     val userName: String,
-    val lastPeriodDate: String,
-    val lastOvulationDate: String?
+    val lastPeriodDate: Long,
+    val lastOvulationDate: Long?
 )

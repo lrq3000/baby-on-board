@@ -1,4 +1,4 @@
-package com.example.bob.ui.compose
+package com.example.bob.ui.compose.mesures
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,8 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.bob.R
+import com.example.bob.ui.compose.mesures.MesurePagerItemScreen
 import com.example.bob.ui.viewModel.BobUiState
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -22,18 +25,17 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun MesureScreen(bobUiState: BobUiState) {
 
-    val lastPeriodDate = if (bobUiState.userLastPeriodsDate !== "") {
-        LocalDate.parse(bobUiState.userLastPeriodsDate)
+    val lastPeriodDate = if (bobUiState.userLastPeriodsDate != 0L) {
+        LocalDateTime.ofEpochSecond(bobUiState.userLastPeriodsDate, 0, ZoneOffset.UTC)
     } else {
-        LocalDate.now()
+        LocalDateTime.now()
     }
 
-    val userLastOvulationDate: String? = bobUiState.userLastOvulationDate
     val ovulationDate =
-        if (userLastOvulationDate == null || userLastOvulationDate == "null" || userLastOvulationDate == "") {
+        if (bobUiState.userLastOvulationDate == null) {
             lastPeriodDate.plusWeeks(2)
         } else {
-            LocalDate.parse(userLastOvulationDate)
+            LocalDateTime.ofEpochSecond(bobUiState.userLastOvulationDate, 0, ZoneOffset.UTC)
         }
 
     val SGcount = ChronoUnit.DAYS.between(ovulationDate, LocalDate.now()) / 7

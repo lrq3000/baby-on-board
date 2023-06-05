@@ -2,8 +2,8 @@ package com.example.bob.ui.viewModel
 
 data class BobUiState(
     val userName: String = "",
-    val userLastPeriodsDate: String = "",
-    val userLastOvulationDate: String? = null
+    val userLastPeriodsDate: Long = 0,
+    val userLastOvulationDate: Long? = null
 )
 
 

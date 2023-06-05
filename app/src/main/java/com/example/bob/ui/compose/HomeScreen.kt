@@ -1,4 +1,4 @@
-package com.example.bob
+package com.example.bob.ui.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -17,10 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bob.ui.theme.light_Customcolor1
+import com.example.bob.R
 import com.example.bob.ui.viewModel.BobUiState
-import com.example.bob.ui.viewModel.BobViewModel
-import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
@@ -33,40 +33,43 @@ fun HomeScreen(
 ) {
     val todayDate = DateTimeFormatter
         .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
-        .format(LocalDate.now())
+        .format(LocalDateTime.now())
 
-    val lastPeriodDate = if (bobUiState.userLastPeriodsDate !== "") {
-        LocalDate.parse(bobUiState.userLastPeriodsDate)
+    val lastPeriodDate = if (bobUiState.userLastPeriodsDate != 0L) {
+        LocalDateTime.ofEpochSecond(bobUiState.userLastPeriodsDate, 0, ZoneOffset.UTC)
     } else {
-        LocalDate.now()
+        LocalDateTime.now()
     }
 
-    val userLastOvulationDate: String? = bobUiState.userLastOvulationDate
-    val ovulationDate = if (userLastOvulationDate == null || userLastOvulationDate == "null" || userLastOvulationDate == "") {
-        lastPeriodDate.plusWeeks(2)
-    } else {
-        LocalDate.parse(userLastOvulationDate)
-    }
+
+//    val userLastOvulationDate: String? = bobUiState.userLastOvulationDate
+
+    val ovulationDate =
+        if (bobUiState.userLastOvulationDate == null || bobUiState.userLastOvulationDate == 0L) {
+            lastPeriodDate.plusWeeks(2)
+        } else {
+            LocalDateTime.ofEpochSecond(bobUiState.userLastOvulationDate, 0, ZoneOffset.UTC)
+        }
 
     val term = DateTimeFormatter
         .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
         .format(ovulationDate.plusWeeks(39))
 
-    val month = ChronoUnit.MONTHS.between(ovulationDate, LocalDate.now()) + 1
+    val month = ChronoUnit.MONTHS.between(ovulationDate, LocalDateTime.now()) + 1
     val stringDisplayMonth = if (month.equals(1)) {
         "$month" + "er"
     } else {
         "$month" + "ème"
     }
-    val amenorrheaWeeks = ChronoUnit.DAYS.between(lastPeriodDate, LocalDate.now()) / 7
-    val amenorrheaDaysLefts = ChronoUnit.DAYS.between(lastPeriodDate, LocalDate.now()) % 7
+    val amenorrheaWeeks = ChronoUnit.DAYS.between(lastPeriodDate, LocalDateTime.now()) / 7
+    val amenorrheaDaysLefts = ChronoUnit.DAYS.between(lastPeriodDate, LocalDateTime.now()) % 7
     val amenorrheaDaysLeftsString = if (amenorrheaDaysLefts != 0.toLong()) {
         " et $amenorrheaDaysLefts jours"
     } else {
         ""
     }
-    val pregnancyWeeks = ChronoUnit.DAYS.between(ovulationDate, LocalDate.now()) / 7
-    val pregnancyDaysLeft = ChronoUnit.DAYS.between(ovulationDate, LocalDate.now()) % 7
+    val pregnancyWeeks = ChronoUnit.DAYS.between(ovulationDate, LocalDateTime.now()) / 7
+    val pregnancyDaysLeft = ChronoUnit.DAYS.between(ovulationDate, LocalDateTime.now()) % 7
     val pregnancyDaysLeftString = if (pregnancyDaysLeft != 0.toLong()) {
         " et $pregnancyDaysLeft jours"
     } else {
@@ -88,7 +91,9 @@ fun HomeScreen(
         Column(modifier = Modifier.padding(top = 32.dp)) {
             Text(
                 text = stringResource(R.string.we_are_the) + " " + todayDate,
-                modifier = Modifier.align(Alignment.End).padding(bottom = 24.dp)
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(bottom = 24.dp)
             )
             Box {
                 Image(

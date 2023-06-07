@@ -22,4 +22,8 @@
     <string name="size">Taille</string>
     <string name="weight">Poids</string>
     <string name="all_my_notes">Toutes mes notes :</string>
+    <string name="settings">Parametres</string>
+    <string name="my_data">Mes infos</string>
+    <string name="about">A propos</string>
+    <string name="start">Commencer</string>
 </resources>

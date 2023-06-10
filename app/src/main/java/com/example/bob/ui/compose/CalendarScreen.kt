@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.bob.R
 
 @Composable
 fun CalendarScreen() {
@@ -19,8 +21,8 @@ fun CalendarScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Calendrier", fontWeight = FontWeight.Black)
+        Text(stringResource(R.string.calendar), fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "Page en construction")
+        Text(stringResource(R.string.WIP_page))
     }
 }

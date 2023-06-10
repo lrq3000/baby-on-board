@@ -79,7 +79,7 @@ fun NoteBody(noteList: List<Note>, onModifyClick: (Int) -> Unit) {
                         id = 0,
                         feeling = 4,
                         date = Date(),
-                        note = "Ceci est un exemple de note.",
+                        note = stringResource(R.string.note_exemple),
                     ),
                     onModifyClick = {}
                 )
@@ -123,7 +123,7 @@ fun DisplayNote(note: Note, onModifyClick: (Note) -> Unit) {
                         .format(note.date), fontWeight = FontWeight.SemiBold
                 )
                 TextButton(onClick = { onModifyClick(note) }) {
-                    Text(text = "Modifier")
+                    Text(text = stringResource(R.string.Edit))
                 }
             }
             Text(

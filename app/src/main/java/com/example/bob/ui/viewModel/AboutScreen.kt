@@ -24,7 +24,7 @@ fun AboutScreen() {
     ) {
         Text(stringResource(id = R.string.about), fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "Page en construction")
-        Text("Version de l'application : 1.0-rc1")
+        Text(text = stringResource(R.string.WIP_page))
+        Text(stringResource(R.string.application_version, "1.0-rc1"))
     }
 }

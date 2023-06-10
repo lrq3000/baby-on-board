@@ -26,4 +26,24 @@
     <string name="my_data">Mes infos</string>
     <string name="about">A propos</string>
     <string name="start">Commencer</string>
+    <string name="application_version">Version de l\'application : %s</string>
+    <string name="WIP_page">Page en construction</string>
+    <string name="welcome_on_BoB">Bienvenue sur BoB</string>
+    <string name="unknown">Inconnue</string>
+    <string name="last_periods">Date de vos dernière règles</string>
+    <string name="last_ovulation">Date de votre ovulation</string>
+    <string name="calendar">Calendrier</string>
+    <string name="Edit">Modifier</string>
+    <string name="note_exemple">Ceci est un exemple de note.</string>
+    <string name="edit_note">Modifier la note</string>
+    <string name="new_note">Nouvelle note :</string>
+    <string name="how_do_you_feel">Comment vous sentez-vous ?</string>
+    <string name="anything_else">Autre chose ?</string>
+    <string name="Delete">Supprimer</string>
+    <string name="Add">Ajouter</string>
+    <string name="Edit_date">Modifier la date</string>
+    <string name="press_button_contraction">Appuyez sur le bouton + quand votre première contraction commence</string>
+    <string name="Start">Début</string>
+    <string name="Duration">Durée</string>
+    <string name="Frequency">Fréquence</string>
 </resources>

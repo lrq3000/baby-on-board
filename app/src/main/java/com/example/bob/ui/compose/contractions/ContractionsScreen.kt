@@ -34,6 +34,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +45,7 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bob.R
 import com.example.bob.data.Contraction
 import com.example.bob.ui.AppViewModelProvider
 import kotlinx.coroutines.launch
@@ -55,7 +57,6 @@ import java.time.temporal.ChronoUnit
 import java.util.Locale
 
 fun formatedHour(date: LocalDateTime): String {
-//    return DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(date)
     return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.FRANCE)
         .format(date)
 }
@@ -119,9 +120,8 @@ fun ContractionScreen(
             if (recordingContraction.value) {
                 Icon(
                     imageVector = Icons.Filled.HourglassBottom,
-              contentDescription = "End contraction"
-            )
-                //                   Text(text = Duration.between(startTime, LocalDateTime.now()).toString())
+                    contentDescription = "End contraction"
+                )
             } else {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add contraction")
             }
@@ -138,7 +138,7 @@ fun ContractionScreen(
                     .fillMaxSize()
                     .padding(32.dp)
             ) {
-                Text(text = "Appuyez sur le bouton + quand votre première contraction commence")
+                Text(text = stringResource(R.string.press_button_contraction))
             }
         }
     }
@@ -155,14 +155,14 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractions: List<Con
                 .padding(vertical = 24.dp),
         ) {
             Row(modifier = Modifier.fillMaxWidth(.50f), horizontalArrangement = Arrangement.End) {
-                Text(text = "Début")
+                Text(text = stringResource(R.string.Start))
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(text = "Durée")
+                Text(text = stringResource(R.string.Duration))
                 Spacer(modifier = Modifier.width(34.dp))
             }
             Spacer(modifier = Modifier.fillMaxWidth(.14f))
             Text(
-                text = "Fréquence",
+                text = stringResource(R.string.Frequency),
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -170,12 +170,9 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractions: List<Con
         sortedContraction.forEachIndexed { index, contraction ->
             var timeBetwinContractionDuration: Long? = null
             if (index > 0) {
-                timeBetwinContractionDuration =
-                    ChronoUnit.SECONDS.between(
-                        contraction.startTime,
-                        sortedContraction[index - 1].startTime
-                    )
-//                contraction.startTime.second.toLong() - sortedContraction[index - 1].startTime.second.toLong()
+                timeBetwinContractionDuration = ChronoUnit.SECONDS.between(
+                    contraction.startTime, sortedContraction[index - 1].startTime
+                )
             }
             if (index != 0) {
                 TimeBetwinContractions(
@@ -189,8 +186,7 @@ fun ContractionBody(sortedContraction: List<Contraction>, contractions: List<Con
 
 @Composable
 fun ContractionRow(
-    contraction: Contraction,
-    contractionNumber: Int
+    contraction: Contraction, contractionNumber: Int
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(.5f),
@@ -198,9 +194,7 @@ fun ContractionRow(
         horizontalArrangement = Arrangement.End
     ) {
         Text(
-            text = formatedHour(contraction.startTime),
-            color = Color.Gray,
-            fontSize = 10.sp
+            text = formatedHour(contraction.startTime), color = Color.Gray, fontSize = 10.sp
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(

@@ -28,10 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bob.R
 import com.example.bob.ui.compose.notes.feelingModel.Feeling
 import com.example.bob.ui.compose.notes.feelingModel.FeelingList
 import kotlinx.coroutines.launch
@@ -81,9 +83,9 @@ fun AddNoteBody(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = if (editingNote) {
-                    "Modifier la note"
+                    stringResource(R.string.edit_note)
                 } else {
-                    "Nouvelle note :"
+                    stringResource(R.string.new_note)
                 }, fontSize = 20.sp, fontWeight = FontWeight.Medium
             )
         }
@@ -99,7 +101,7 @@ fun AddNoteBody(
             IconButton(onClick = { openDialog.value = true }) {
                 Icon(
                     imageVector = Icons.Rounded.EditCalendar,
-                    contentDescription = "Modifier la date"
+                    contentDescription = stringResource(id = R.string.Edit_date)
                 )
             }
         }
@@ -110,7 +112,7 @@ fun AddNoteBody(
         ) {
             Column {
                 val data: List<Feeling> = FeelingList.feelingList
-                Text(text = "Comment vous sentez-vous ?")
+                Text(text = stringResource(R.string.how_do_you_feel))
                 Spacer(modifier = Modifier.size(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -136,13 +138,10 @@ fun AddNoteBody(
                                 })
                         }
                     }
-//                    Text(text = FeelingList.feelingListString[data.indexOf(selectedOption)])
                 }
-//                Text (text = noteUiState.feeling.toString())
-//                Text(text = FeelingList.feelingListString[noteUiState.feeling])
             }
             Column {
-                Text(text = "Autre chose ?")
+                Text(text = stringResource(R.string.anything_else))
                 Spacer(modifier = Modifier.size(16.dp))
                 TextField(
                     value = noteUiState.note,
@@ -155,14 +154,14 @@ fun AddNoteBody(
             Row(modifier = Modifier.fillMaxWidth()) {
                 if (editingNote){
                     TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Supprimer")
+                        Text(text = stringResource(R.string.Delete))
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 TextButton(
                     onClick = { cancel() },
                 ) {
-                    Text(text = "Annuler")
+                    Text(stringResource(id = R.string.cancel))
                 }
                 TextButton(
                     onClick = { onSaveClick() },
@@ -170,9 +169,9 @@ fun AddNoteBody(
                 ) {
                     Text(
                         text = if (editingNote) {
-                            "Enregistrer"
+                            stringResource(id = R.string.save)
                         } else {
-                            "Ajouter"
+                            stringResource(R.string.Add)
                         }
                     )
                 }
@@ -210,13 +209,13 @@ fun AddNoteBody(
                         openDialog.value = false
                     }
                 ) {
-                    Text("Annuler")
+                    Text(stringResource(id = R.string.cancel))
                 }
             }
         ) {
             DatePicker(
                 state = datePickerState,
-                title = { Text(text = "Modifier la date", modifier = Modifier.padding(24.dp)) })
+                title = { Text(text = stringResource(R.string.Edit_date), modifier = Modifier.padding(24.dp)) })
         }
     }
 }

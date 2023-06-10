@@ -33,7 +33,7 @@ fun WelcomeScreen(onButtonStartClick: () -> Unit = {}) {
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Bienvenue sur BoB", fontSize = 32.sp)
+        Text(stringResource(R.string.welcome_on_BoB), fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
         Surface(
             Modifier

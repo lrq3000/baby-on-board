@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bob.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String, SGcount: Int) {
 //fun PagerItemScreen() {
@@ -56,7 +55,7 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
             )
             Image(
                 painter = painterResource(id = image),
-                contentDescription = "test",
+                contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(.5f)
@@ -92,26 +91,22 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
                         Text(
                             text = stringResource(R.string.size),
                             fontSize = 20.sp,
-//                            color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
                             text = size,
                             fontSize = 20.sp,
-//                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = stringResource(R.string.weight),
                             fontSize = 20.sp,
-//                            color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
                             text = weight,
                             fontSize = 20.sp,
-//                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

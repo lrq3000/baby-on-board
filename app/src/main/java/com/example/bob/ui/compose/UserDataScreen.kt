@@ -76,7 +76,6 @@ fun InformationScreen(
                 } else {
                     "Inconnue"
                 }
-
             }
         }
 
@@ -255,15 +254,15 @@ fun InformationScreen(
                 }
             }, dismissButton = {
                 TextButton(onClick = { openDialog.value = false }) {
-                    Text("Annuler")
+                    Text(stringResource(id = R.string.cancel))
                 }
             }, onDismissRequest = { openDialog.value = false }) {
                 DatePicker(title = {
                     Text(
                         text = if (datePickerTypeIsPeriod) {
-                            "Date de vos dernière règles"
+                            stringResource(R.string.last_periods)
                         } else {
-                            "Date de votre ovulation"
+                            stringResource(R.string.last_ovulation)
                         }, modifier = Modifier.padding(24.dp)
                     )
                 }, state = datePickerState, dateValidator = {

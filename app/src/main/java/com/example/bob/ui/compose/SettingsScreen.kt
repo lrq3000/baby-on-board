@@ -23,6 +23,6 @@ fun SettingsScreen() {
     ) {
         Text(stringResource(id = R.string.settings), fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "Page en construction")
+        Text(stringResource(id = R.string.WIP_page))
     }
 }

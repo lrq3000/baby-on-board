@@ -28,7 +28,7 @@
     <string name="start">Commencer</string>
     <string name="application_version">Version de l\'application : %s</string>
     <string name="WIP_page">Page en construction</string>
-    <string name="welcome_on_BoB">Bienvenue sur BoB</string>
+    <string name="welcome_on_BoB">Bienvenue sur BoB %s</string>
     <string name="unknown">Inconnue</string>
     <string name="last_periods">Date de vos dernière règles</string>
     <string name="last_ovulation">Date de votre ovulation</string>
@@ -46,4 +46,9 @@
     <string name="Start">Début</string>
     <string name="Duration">Durée</string>
     <string name="Frequency">Fréquence</string>
+    <string name="BoB_support">Baby on Board vous accompagne tout au long de votre grossesse et jusqu\'a votre accouchement.</string>
+    <string name="BoB_protect">Son défi ? Le faire en protégeant votre vie privée et celle de votre bébé %s.</string>
+    <string name="BoB_how">Comment ? BoB ne recolte aucune de vos données. Elles sont toutes stockées localement sur votre téléphone et ne sont accessibles pour personne.</string>
+    <string name="BoB_ecolo">Petit bonus: c\'est aussi beaucoup plus écolo %s !</string>
+    <string name="BoB_gafam">PS: Savez-vous que toutes les applications de suivi de grossesse transmettent leurs données aux GAFAM qui créent un profil psychologique de votre bébé avant même sa naissance ? %s</string>
 </resources>

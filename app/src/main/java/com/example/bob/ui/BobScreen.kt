@@ -87,7 +87,7 @@ enum class BobScreen() {
 fun BobTopAppBar(
     navController: NavController,
     openDrawer: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -178,7 +178,7 @@ fun BobApp(
     data class DrawerItems(
         val icon: ImageVector,
         @StringRes val title: Int,
-        val destination: BobScreen
+        val destination: BobScreen,
     )
 
     val items = arrayListOf(
@@ -218,11 +218,17 @@ fun BobApp(
     }) {
         Scaffold(
             topBar = {
-                BobTopAppBar(
-                    navController = navController,
-                    openDrawer = { scope.launch { drawerState.open() } })
+                if (currentDestination?.hierarchy?.any { it.route == "Welcome" || it.route == "UserData" } == false) {
+                    BobTopAppBar(
+                        navController = navController,
+                        openDrawer = { scope.launch { drawerState.open() } })
+                }
             },
-            bottomBar = { BobBottomAppBar(navController = navController) },
+            bottomBar = {
+                if (currentDestination?.hierarchy?.any { it.route == "Welcome" || it.route == "UserData"} == false) {
+                    BobBottomAppBar(navController = navController)
+                }
+            }
         ) { paddingValues ->
             val startDestination = if (bobUiState.userName !== "") {
                 BobScreen.Home.name

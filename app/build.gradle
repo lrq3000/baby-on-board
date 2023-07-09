@@ -9,11 +9,11 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.bob"
+        applicationId 'com.example.bob'
         minSdk 26
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0-rc1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -54,14 +54,14 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.7.2'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.1.0'
-    implementation('androidx.compose.material3:material3:1.1.0')
-    implementation('androidx.compose.material3:material3-window-size-class:1.1.0')
+    implementation 'androidx.compose.material3:material3:1.1.1'
+    implementation('androidx.compose.material3:material3:1.1.1')
+    implementation('androidx.compose.material3:material3-window-size-class:1.1.1')
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.navigation:navigation-compose:2.6.0'
     implementation 'androidx.navigation:navigation-runtime-ktx:2.6.0'
-    implementation 'androidx.room:room-common:2.5.1'
+    implementation "androidx.room:room-common:$room_version"
     implementation 'androidx.core:core-ktx:1.10.1'
 
     // Room

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.bob'
+    namespace 'com.baldo.bob'
     compileSdk 33
 
     defaultConfig {
-        applicationId 'com.example.bob'
+        applicationId 'com.baldo.bob'
         minSdk 26
         targetSdk 33
         versionCode 1

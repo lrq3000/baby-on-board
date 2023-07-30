@@ -1,4 +1,6 @@
-#Licence
+# Baby on Board (aka. BoB)
+
+## License
 
 Baby on Board (aka. BoB) is an application of pregnancy tracking that respect your privacy
 

@@ -1,5 +1,8 @@
 # Baby on Board (aka. BoB)
 
+Baby on Board is an application of pregnancy tracking that respect your liberty and privacy.
+It doesn't need permissions. So no risk.
+
 ## License
 
 Baby on Board (aka. BoB) is an application of pregnancy tracking that respect your privacy

@@ -1,4 +1,4 @@
-package com.baldo.bob.ui.viewModel
+package com.baldo.bob.ui.compose
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +25,6 @@ fun AboutScreen() {
         Text(stringResource(id = R.string.about), fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = stringResource(R.string.WIP_page))
-        Text(stringResource(R.string.application_version, "1.0-rc1"))
+        Text(stringResource(R.string.application_version, "1.1"))
     }
 }

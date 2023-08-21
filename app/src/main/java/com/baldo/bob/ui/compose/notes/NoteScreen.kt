@@ -37,8 +37,6 @@ import com.baldo.bob.ui.AppViewModelProvider
 import com.baldo.bob.ui.compose.notes.feelingModel.FeelingList
 import java.text.DateFormat
 import java.util.Date
-import java.util.Locale
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -119,7 +117,7 @@ fun DisplayNote(note: Note, onModifyClick: (Note) -> Unit) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
+                    text = DateFormat.getDateInstance(DateFormat.LONG)
                         .format(note.date), fontWeight = FontWeight.SemiBold
                 )
                 TextButton(onClick = { onModifyClick(note) }) {
@@ -127,7 +125,8 @@ fun DisplayNote(note: Note, onModifyClick: (Note) -> Unit) {
                 }
             }
             Text(
-                text = FeelingList.feelingListString[note.feeling],
+                text = FeelingList.feelingList[note.feeling].icon + " - " + stringResource(id = FeelingList
+                    .feelingList[note.feeling].label) ,
                 color = MaterialTheme.colorScheme.secondary
             )
             Text(text = note.note)

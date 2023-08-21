@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.EditCalendar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -39,7 +38,6 @@ import com.baldo.bob.ui.compose.notes.feelingModel.FeelingList
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Date
-import java.util.Locale
 
 @Composable
 fun AddNoteScreen(
@@ -95,7 +93,7 @@ fun AddNoteBody(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
+                text = DateFormat.getDateInstance(DateFormat.LONG)
                     .format(noteUiState.date)
             )
             IconButton(onClick = { openDialog.value = true }) {
@@ -123,7 +121,7 @@ fun AddNoteBody(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(text = selection.icon, fontSize = 24.sp)
                             Spacer(modifier = Modifier.size(8.dp))
-                            Text(text = selection.label)
+                            Text(text = stringResource(id = selection.label))
                             Spacer(modifier = Modifier.size(8.dp))
                             RadioButton(
                                 selected = (selection == data[noteUiState.feeling]),

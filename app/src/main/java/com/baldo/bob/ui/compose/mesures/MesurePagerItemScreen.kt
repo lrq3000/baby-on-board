@@ -1,6 +1,5 @@
 package com.baldo.bob.ui.compose.mesures
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,14 +29,6 @@ import com.baldo.bob.R
 
 @Composable
 fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String, SGcount: Int) {
-//fun PagerItemScreen() {
-
-//    val image: Int = R.drawable._2
-//    val name: String = "test"
-//    val size: String = "testtaille"
-//    val weight: String = "testpoids"
-//    val SGcount: Int = 12
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +36,7 @@ fun MesurePagerItemScreen(image: Int, name: String, size: String, weight: String
     ) {
         Column(modifier = Modifier) {
             Text(
-                text = "$SGcount SG",
+                text = stringResource(R.string.sg, SGcount),
                 Modifier
                     .fillMaxWidth()
                     .padding(all = 8.dp),

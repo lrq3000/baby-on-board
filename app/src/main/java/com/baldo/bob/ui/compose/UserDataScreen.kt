@@ -63,7 +63,7 @@ fun InformationScreen(
 
         val periodFormattedDate by remember {
             derivedStateOf {
-                DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
                     .format(periodPickedDate)
             }
         }
@@ -71,7 +71,7 @@ fun InformationScreen(
         val ovulationFormattedDate by remember {
             derivedStateOf {
                 if (ovulationPickedDate !== null) {
-                    DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
+                    DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
                         .format(ovulationPickedDate)
                 } else {
                     "Inconnue"

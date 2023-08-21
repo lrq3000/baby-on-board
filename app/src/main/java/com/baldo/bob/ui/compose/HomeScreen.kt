@@ -24,7 +24,6 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 @Composable
 fun HomeScreen(
@@ -32,7 +31,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val todayDate = DateTimeFormatter
-        .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
+        .ofLocalizedDate(FormatStyle.FULL)
         .format(LocalDateTime.now())
 
     val lastPeriodDate = if (bobUiState.userLastPeriodsDate != 0L) {
@@ -52,35 +51,35 @@ fun HomeScreen(
         }
 
     val term = DateTimeFormatter
-        .ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.FRANCE)
+        .ofLocalizedDate(FormatStyle.LONG)
         .format(ovulationDate.plusWeeks(39))
 
     val month = ChronoUnit.MONTHS.between(ovulationDate, LocalDateTime.now()) + 1
     val stringDisplayMonth = if (month.equals(1)) {
-        "$month" + "er"
+        "$month" + stringResource(R.string.st)
     } else {
-        "$month" + "ème"
+        "$month" + stringResource(R.string.nd)
     }
     val amenorrheaWeeks = ChronoUnit.DAYS.between(lastPeriodDate, LocalDateTime.now()) / 7
     val amenorrheaDaysLefts = ChronoUnit.DAYS.between(lastPeriodDate, LocalDateTime.now()) % 7
     val amenorrheaDaysLeftsString = if (amenorrheaDaysLefts != 0.toLong()) {
-        " et $amenorrheaDaysLefts jours"
+        stringResource(R.string.et_jours, amenorrheaDaysLefts)
     } else {
         ""
     }
     val pregnancyWeeks = ChronoUnit.DAYS.between(ovulationDate, LocalDateTime.now()) / 7
     val pregnancyDaysLeft = ChronoUnit.DAYS.between(ovulationDate, LocalDateTime.now()) % 7
     val pregnancyDaysLeftString = if (pregnancyDaysLeft != 0.toLong()) {
-        " et $pregnancyDaysLeft jours"
+        stringResource(R.string.et_jours, pregnancyDaysLeft)
     } else {
         ""
     }
     val trimester = if (pregnancyWeeks <= 13) {
-        "1er"
+        stringResource(R.string._1st)
     } else if (pregnancyWeeks <= 26) {
-        "2ème"
+        stringResource(R.string._2nd)
     } else {
-        "3ème"
+        stringResource(R.string._3rd)
     }
     Column(
         modifier = modifier

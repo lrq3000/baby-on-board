@@ -38,7 +38,7 @@ fun MesureScreen(bobUiState: BobUiState) {
         }
 
     val SGcount = ChronoUnit.DAYS.between(ovulationDate, LocalDateTime.now()) / 7
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { 39 })
 
     val weeksInfos = when (pagerState.currentPage + 2) {
         2 -> listOf(R.drawable._2, stringResource(R.string.period_late), "0,2mm", "/")
@@ -143,7 +143,6 @@ fun MesureScreen(bobUiState: BobUiState) {
                 )
             }
             HorizontalPager(
-                pageCount = 39,
                 state = pagerState,
                 contentPadding = PaddingValues(horizontal = 32.dp)
             ) { page ->

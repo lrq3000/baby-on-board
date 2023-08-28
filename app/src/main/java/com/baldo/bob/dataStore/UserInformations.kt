@@ -5,3 +5,7 @@ data class UserInformations(
     val lastPeriodDate: Long,
     val lastOvulationDate: Long?
 )
+
+data class AppSettings(
+    val themeSetting : String
+)

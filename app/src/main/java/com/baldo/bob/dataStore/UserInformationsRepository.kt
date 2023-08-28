@@ -19,6 +19,7 @@ class UserInformationsRepository(
         val USER_NAME = stringPreferencesKey("user_name")
         val LAST_PERIOD_DATE = longPreferencesKey("last_period_date")
         val LAST_OVULATION_DATE = longPreferencesKey("last_ovulation_date")
+        val THEME_SETTING = stringPreferencesKey("theme_setting")
         const val TAG = "UserPreferencesRepo"
     }
 

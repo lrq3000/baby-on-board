@@ -17,13 +17,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BoBTheme(darkTheme = darkTheme) {
+            BoBTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BobApp(darkTheme = darkTheme)
+                    BobApp()
                 }
             }
         }

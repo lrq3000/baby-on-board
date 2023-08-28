@@ -23,20 +23,6 @@ class UserInformationsRepository(
         const val TAG = "UserPreferencesRepo"
     }
 
-//    val getUserInformations: Flow<String> = context.dataStore.data
-//        .catch {
-//            if (it is IOException) {
-//                Log.e(TAG, "Error reading preferences.", it)
-//                emit(emptyPreferences())
-//            } else {
-//                throw it
-//            }
-//        }
-//        .map { preferences ->
-//            preferences[USER_NAME] ?: ""
-//            preferences[LAST_PERIOD_DATE]?: ""
-//        }
-
     val userPreferencesFlow: Flow<UserInformations> = dataStore.data.catch {
         if (it is IOException) {
             Log.e(TAG, "Error reading preferences.", it)
@@ -52,6 +38,19 @@ class UserInformationsRepository(
         UserInformations(userName, lastPeriodDate, lastOvulationDate)
     }
 
+    val appSettingsPreferencesFlow: Flow<AppSettings> = dataStore.data.catch {
+        if (it is IOException) {
+            Log.e(TAG, "Error reading preferences.", it)
+            emit(emptyPreferences())
+        } else {
+            throw it
+        }
+    }.map { preferences ->
+        val themeSetting = preferences[THEME_SETTING] ?: "system"
+
+        AppSettings(themeSetting)
+    }
+
     suspend fun saveUserInformations(userInformations: UserInformations) {
         dataStore.edit { preferences ->
             preferences[USER_NAME] = userInformations.userName
@@ -60,11 +59,23 @@ class UserInformationsRepository(
         }
     }
 
+    suspend fun saveAppSettings(appSettings: AppSettings) {
+        dataStore.edit { preferences ->
+            preferences[THEME_SETTING] = appSettings.themeSetting
+        }
+    }
+
     fun getDetails() = dataStore.data.map {
         UserInformations(
             userName = it[USER_NAME] ?: "",
             lastPeriodDate = it[LAST_PERIOD_DATE] ?: 0,
             lastOvulationDate = it[LAST_OVULATION_DATE]
+        )
+    }
+
+    fun getAppSettings() = dataStore.data.map {
+        AppSettings(
+            themeSetting = it[THEME_SETTING] ?: "system"
         )
     }
 }

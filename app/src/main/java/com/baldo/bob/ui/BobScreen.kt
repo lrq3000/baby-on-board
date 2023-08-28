@@ -2,9 +2,11 @@ package com.baldo.bob.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +31,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -66,6 +69,7 @@ import com.baldo.bob.ui.compose.notes.AddNoteScreen
 import com.baldo.bob.ui.compose.notes.NoteEditScreen
 import com.baldo.bob.ui.compose.notes.NoteScreen
 import com.baldo.bob.ui.compose.AboutScreen
+import com.baldo.bob.ui.theme.BoBTheme
 import com.baldo.bob.ui.viewModel.BobViewModel
 import kotlinx.coroutines.launch
 
@@ -172,6 +176,7 @@ fun BobApp(
     navController: NavHostController = rememberNavController(),
 ) {
     val bobUiState by bobViewModel.uiState.collectAsState()
+    val appUiState by bobViewModel.appUIState.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -194,106 +199,119 @@ fun BobApp(
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
-        ModalDrawerSheet {
-            Spacer(Modifier.height(24.dp))
-            Text(
-                stringResource(id = R.string.title_app),
-                modifier = Modifier.padding(start = 24.dp)
-            )
-            Spacer(Modifier.height(12.dp))
-            items.forEach { item ->
-                NavigationDrawerItem(
-                    icon = { Icon(item.icon, contentDescription = null) },
-                    label = { Text(stringResource(id = item.title)) },
-                    selected = currentDestination?.hierarchy?.any { it.route == item.destination.name } == true,
-                    onClick = {
-                        scope.launch { drawerState.close() }
-                        navController.navigate(item.destination.name)
+
+    val useDarkTheme: Boolean = if (appUiState.themeSetting == "system") {
+        isSystemInDarkTheme()
+    } else appUiState.themeSetting != "light"
+
+    BoBTheme(useDarkTheme = useDarkTheme) {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
+                ModalDrawerSheet {
+                    Spacer(Modifier.height(24.dp))
+                    Text(
+                        stringResource(id = R.string.title_app),
+                        modifier = Modifier.padding(start = 24.dp)
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    items.forEach { item ->
+                        NavigationDrawerItem(
+                            icon = { Icon(item.icon, contentDescription = null) },
+                            label = { Text(stringResource(id = item.title)) },
+                            selected = currentDestination?.hierarchy?.any { it.route == item.destination.name } == true,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                navController.navigate(item.destination.name)
+                            },
+                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                        )
+                    }
+                }
+            }) {
+                Scaffold(
+                    topBar = {
+                        if (currentDestination?.hierarchy?.any { it.route == "Welcome" || it.route == "UserData" } == false) {
+                            BobTopAppBar(
+                                navController = navController,
+                                openDrawer = { scope.launch { drawerState.open() } })
+                        }
                     },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
-            }
-        }
-    }) {
-        Scaffold(
-            topBar = {
-                if (currentDestination?.hierarchy?.any { it.route == "Welcome" || it.route == "UserData" } == false) {
-                    BobTopAppBar(
+                    bottomBar = {
+                        if (currentDestination?.hierarchy?.any { it.route == "Welcome" || it.route == "UserData" } == false) {
+                            BobBottomAppBar(navController = navController)
+                        }
+                    }
+                ) { paddingValues ->
+                    val startDestination = if (bobUiState.userName !== "") {
+                        BobScreen.Home.name
+                    } else {
+                        BobScreen.Welcome.name
+                    }
+                    NavHost(
                         navController = navController,
-                        openDrawer = { scope.launch { drawerState.open() } })
-                }
-            },
-            bottomBar = {
-                if (currentDestination?.hierarchy?.any { it.route == "Welcome" || it.route == "UserData"} == false) {
-                    BobBottomAppBar(navController = navController)
-                }
-            }
-        ) { paddingValues ->
-            val startDestination = if (bobUiState.userName !== "") {
-                BobScreen.Home.name
-            } else {
-                BobScreen.Welcome.name
-            }
-            NavHost(
-                navController = navController,
-                startDestination = startDestination,
-                modifier = modifier.padding(paddingValues)
-            ) {
-                composable(route = BobScreen.Home.name) {
-                    HomeScreen(bobUiState)
-                }
+                        startDestination = startDestination,
+                        modifier = modifier.padding(paddingValues)
+                    ) {
+                        composable(route = BobScreen.Home.name) {
+                            HomeScreen(bobUiState)
+                        }
 
-                composable(route = BobScreen.UserData.name) {
-                    InformationScreen(
-                        bobViewModel,
-                        bobUiState,
-                        onSaveButtonClicked = { navController.navigate(BobScreen.Home.name) })
-                }
+                        composable(route = BobScreen.UserData.name) {
+                            InformationScreen(
+                                bobViewModel,
+                                bobUiState,
+                                onSaveButtonClicked = { navController.navigate(BobScreen.Home.name) })
+                        }
 
-                composable(route = BobScreen.Fruits.name) {
-                    MesureScreen(bobUiState)
-                }
+                        composable(route = BobScreen.Fruits.name) {
+                            MesureScreen(bobUiState)
+                        }
 
-                composable(route = BobScreen.CalendarList.name) {
-                    NoteScreen(
-                        onAddButtonClicked = { navController.navigate(BobScreen.AddNote.name) },
-                        navigateToNoteUpdate = {
-                            navController.navigate("${BobScreen.EditNote.name}/${it}")
-                        },
-                    )
-                }
+                        composable(route = BobScreen.CalendarList.name) {
+                            NoteScreen(
+                                onAddButtonClicked = { navController.navigate(BobScreen.AddNote.name) },
+                                navigateToNoteUpdate = {
+                                    navController.navigate("${BobScreen.EditNote.name}/${it}")
+                                },
+                            )
+                        }
 
-                composable(
-                    route = BobScreen.AddNote.name,
-                ) {
-                    AddNoteScreen(
-                        navigateBack = { navController.popBackStack() }
-                    )
-                }
+                        composable(
+                            route = BobScreen.AddNote.name,
+                        ) {
+                            AddNoteScreen(
+                                navigateBack = { navController.popBackStack() }
+                            )
+                        }
 
-                composable(
-                    route = "${BobScreen.EditNote.name}/{noteId}",
-                    arguments = listOf(navArgument("noteId") { type = NavType.IntType })
-                ) {
-                    NoteEditScreen(navigateBack = { navController.popBackStack() })
-                }
+                        composable(
+                            route = "${BobScreen.EditNote.name}/{noteId}",
+                            arguments = listOf(navArgument("noteId") { type = NavType.IntType })
+                        ) {
+                            NoteEditScreen(navigateBack = { navController.popBackStack() })
+                        }
 
-                composable(route = BobScreen.Contraction.name) {
-                    ContractionScreen()
-                }
+                        composable(route = BobScreen.Contraction.name) {
+                            ContractionScreen()
+                        }
 
-                composable(route = BobScreen.Settings.name) {
-                    SettingsScreen()
-                }
-                composable(route = BobScreen.About.name) {
-                    AboutScreen()
-                }
-                composable(route = BobScreen.Calendar.name) {
-                    CalendarScreen()
-                }
-                composable(route = BobScreen.Welcome.name) {
-                    WelcomeScreen(onButtonStartClick = { navController.navigate(BobScreen.UserData.name) })
+                        composable(route = BobScreen.Settings.name) {
+                            SettingsScreen(bobViewModel, appUiState)
+                        }
+                        composable(route = BobScreen.About.name) {
+                            AboutScreen()
+                        }
+                        composable(route = BobScreen.Calendar.name) {
+                            CalendarScreen()
+                        }
+                        composable(route = BobScreen.Welcome.name) {
+                            WelcomeScreen(onButtonStartClick = { navController.navigate(BobScreen.UserData.name) })
+                        }
+                    }
                 }
             }
         }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.baldo.bob.dataStore.AppSettings
 import com.baldo.bob.dataStore.UserInformations
 import com.baldo.bob.dataStore.UserInformationsRepository
 import kotlinx.coroutines.flow.*
@@ -28,9 +29,26 @@ class BobViewModel(
             initialValue = BobUiState()
         )
 
+    val appUIState: StateFlow<AppUiState> =
+        userInformationsRepository.appSettingsPreferencesFlow.map { data ->
+            AppUiState(
+                 themeSetting = data.themeSetting
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = AppUiState()
+        )
+
     fun updateUserInformations(userInformations: UserInformations) {
         viewModelScope.launch {
             userInformationsRepository.saveUserInformations(userInformations)
+        }
+    }
+
+    fun updateAppSettings(appSettings: AppSettings){
+        viewModelScope.launch {
+            userInformationsRepository.saveAppSettings(appSettings)
         }
     }
 
@@ -39,9 +57,7 @@ class BobViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as com.baldo.bob.BobApplication)
                 BobViewModel(application.userInformationsRepository)
-//                AddNoteViewModel(application.notesRepository)
             }
         }
     }
-
 }

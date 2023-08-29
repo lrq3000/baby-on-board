@@ -41,9 +41,10 @@ fun SettingsScreen(
 @Composable
 fun ThemeSwitcher(bobViewModel: BobViewModel, appUiState: AppUiState) {
     Column {
+        val themeSetting: String = appUiState.themeSetting
         Row(verticalAlignment = Alignment.CenterVertically) {
             Switch(
-                checked = appUiState.themeSetting == "system",
+                checked = themeSetting == "system",
                 onCheckedChange = {
                     bobViewModel.updateAppSettings(AppSettings(themeSetting = "system"))
                 })
@@ -51,7 +52,7 @@ fun ThemeSwitcher(bobViewModel: BobViewModel, appUiState: AppUiState) {
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Switch(
-                checked = appUiState.themeSetting == "light",
+                checked = themeSetting == "light",
                 onCheckedChange = {
                     bobViewModel.updateAppSettings(AppSettings(themeSetting = "light"))
                 })
@@ -59,7 +60,7 @@ fun ThemeSwitcher(bobViewModel: BobViewModel, appUiState: AppUiState) {
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Switch(
-                checked = appUiState.themeSetting == "dark",
+                checked = themeSetting == "dark",
                 onCheckedChange = {
                     bobViewModel.updateAppSettings(AppSettings(themeSetting = "dark"))
                 })

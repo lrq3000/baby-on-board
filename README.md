@@ -3,6 +3,11 @@
 Baby on Board is an application of pregnancy tracking that respect your liberty and privacy.
 It doesn't need permissions. So no risk.
 
+## Translations :
+Interested in helping to translate K-9 Mail? Contribute here:
+
+[Baby on Board localization](https://poeditor.com/projects/view?id=641215) 
+
 ## License
 
 Baby on Board (aka. BoB) is an application of pregnancy tracking that respect your privacy

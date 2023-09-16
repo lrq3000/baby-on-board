@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.baldo.bob.dataStore.AppSettings
 import com.baldo.bob.dataStore.UserInformations
 import com.baldo.bob.dataStore.UserInformationsRepository
+import com.baldo.bob.ui.compose.weight.viewModel.WeightUiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 class BobViewModel(

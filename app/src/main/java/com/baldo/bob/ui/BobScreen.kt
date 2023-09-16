@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Scale
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.DrawerValue
@@ -69,6 +70,8 @@ import com.baldo.bob.ui.compose.notes.AddNoteScreen
 import com.baldo.bob.ui.compose.notes.NoteEditScreen
 import com.baldo.bob.ui.compose.notes.NoteScreen
 import com.baldo.bob.ui.compose.AboutScreen
+import com.baldo.bob.ui.compose.weight.AddWeightScreen
+import com.baldo.bob.ui.compose.weight.WeightScreen
 import com.baldo.bob.ui.theme.BoBTheme
 import com.baldo.bob.ui.viewModel.BobViewModel
 import kotlinx.coroutines.launch
@@ -84,7 +87,9 @@ enum class BobScreen() {
     Contraction,
     Settings,
     About,
-    Welcome
+    Welcome,
+    Weight,
+    AddWeight
 }
 
 @Composable
@@ -138,6 +143,13 @@ fun BobBottomAppBar(navController: NavController, modifier: Modifier = Modifier)
                 Icon(
                     painter = painterResource(id = R.drawable.nutrition_icon),
                     contentDescription = "Fruits"
+                )
+            })
+        NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == "Weight" } == true,
+            onClick = { navController.navigate(BobScreen.Weight.name) }, icon = {
+                Icon(
+                    imageVector = Icons.Rounded.Scale,
+                    contentDescription = "Weight"
                 )
             })
         NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == "Calendar" } == true,
@@ -310,6 +322,10 @@ fun BobApp(
                         }
                         composable(route = BobScreen.Welcome.name) {
                             WelcomeScreen(onButtonStartClick = { navController.navigate(BobScreen.UserData.name) })
+                        }
+                        composable(route=BobScreen.Weight.name){
+                            WeightScreen(
+                            )
                         }
                     }
                 }

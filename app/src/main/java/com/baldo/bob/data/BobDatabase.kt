@@ -1,6 +1,7 @@
 package com.baldo.bob.data
 
 import android.content.Context
+import androidx.compose.ui.Modifier
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -13,11 +14,12 @@ import java.time.ZoneOffset
 import java.util.Date
 import java.util.TimeZone
 
-@Database(entities = [Note::class, Contraction::class], version = 6, exportSchema = false)
+@Database(entities = [Note::class, Contraction::class, Weight::class], version = 7, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class BobDatabase : RoomDatabase() {
     abstract fun notesDao(): NotesDao
     abstract fun contractionDao(): ContractionsDao
+    abstract fun weightDao(): WeightDao
 
     companion object {
         @Volatile

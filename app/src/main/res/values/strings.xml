@@ -101,4 +101,7 @@
     <string name="great">Au top !</string>
     <string name="good">Ca va</string>
     <string name="neutral">Bof</string>
+    <string name="date">Date</string>
+    <string name="your_weight">Votre poids</string>
+    <string name="add_your_weight">Ajoutez votre poids</string>
 </resources>

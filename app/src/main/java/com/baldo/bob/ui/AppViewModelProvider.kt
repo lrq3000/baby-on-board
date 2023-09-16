@@ -10,6 +10,7 @@ import com.baldo.bob.ui.compose.contractions.ContractionsViewModel
 import com.baldo.bob.ui.compose.notes.AddNoteViewModel
 import com.baldo.bob.ui.compose.notes.NoteEditViewModel
 import com.baldo.bob.ui.compose.notes.NoteViewModel
+import com.baldo.bob.ui.compose.weight.viewModel.WeightViewModel
 import com.baldo.bob.ui.viewModel.BobViewModel
 
 object AppViewModelProvider {
@@ -34,6 +35,10 @@ object AppViewModelProvider {
 
         initializer {
             ContractionsViewModel(bobApplication().appDataContainer.contactionsRepository)
+        }
+
+        initializer {
+            WeightViewModel(bobApplication().appDataContainer.weightRepository)
         }
     }
 }

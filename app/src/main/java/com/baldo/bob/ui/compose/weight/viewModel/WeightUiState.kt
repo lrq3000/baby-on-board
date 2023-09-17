@@ -13,7 +13,7 @@ fun WeightUiState.toWeight(): Weight = Weight(
     weight = weight
 )
 
-fun Weight.toWeightuiState(): WeightUiState = WeightUiState(
+fun Weight.toWeightUiState(): WeightUiState = WeightUiState(
     date = date,
     weight = weight
 )

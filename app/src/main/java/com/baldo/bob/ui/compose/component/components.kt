@@ -1,16 +1,16 @@
 package com.baldo.bob.ui.compose.component
 
-import android.util.Log
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
 fun NumberField(
+    modifier: Modifier = Modifier,
     value: Float?,
     onNumberChange: (Float?) -> Unit,
 ) {
@@ -30,6 +30,7 @@ fun NumberField(
     // for no negative numbers use "[\d]*[.]?[\d]*"
 
     OutlinedTextField(
+        modifier = modifier,
         value = textValue.value,
         onValueChange = {
             if (numberRegex.matches(it)) {

@@ -59,6 +59,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.baldo.bob.R
+import com.baldo.bob.ui.compose.AboutScreen
 import com.baldo.bob.ui.compose.CalendarScreen
 import com.baldo.bob.ui.compose.HomeScreen
 import com.baldo.bob.ui.compose.InformationScreen
@@ -69,7 +70,6 @@ import com.baldo.bob.ui.compose.mesures.MesureScreen
 import com.baldo.bob.ui.compose.notes.AddNoteScreen
 import com.baldo.bob.ui.compose.notes.NoteEditScreen
 import com.baldo.bob.ui.compose.notes.NoteScreen
-import com.baldo.bob.ui.compose.AboutScreen
 import com.baldo.bob.ui.compose.weight.AddWeightScreen
 import com.baldo.bob.ui.compose.weight.WeightScreen
 import com.baldo.bob.ui.theme.BoBTheme
@@ -323,8 +323,12 @@ fun BobApp(
                         composable(route = BobScreen.Welcome.name) {
                             WelcomeScreen(onButtonStartClick = { navController.navigate(BobScreen.UserData.name) })
                         }
-                        composable(route=BobScreen.Weight.name){
-                            WeightScreen(
+                        composable(route = BobScreen.Weight.name) {
+                            WeightScreen(onAddButtonClicked = { navController.navigate(BobScreen.AddWeight.name) }
+                            )
+                        }
+                        composable(route = BobScreen.AddWeight.name) {
+                            AddWeightScreen(navigateBack = { navController.popBackStack() }
                             )
                         }
                     }

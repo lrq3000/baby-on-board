@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.baldo.bob.BobApplication
 import com.baldo.bob.data.WeightRepository
 import com.baldo.bob.ui.compose.notes.AddNoteViewModel
+import java.util.Date
 
 class AddWeightViewModel(
     private val weightRepository: WeightRepository
